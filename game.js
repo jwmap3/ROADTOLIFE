@@ -34,7 +34,8 @@ function makeCode(){var c='';for(var i=0;i<4;i++)c+=CODECHARS[Math.floor(Math.ra
 function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('on')},2600)}
 function isWho(c){return !!c&&/^\s*who am i\??/i.test(c.prompt||'')}
 function hintsOf(c){var p=String(c.prompt||'').replace(/^\s*who am i\??\s*/i,'');return p.split(/(?:^|\n)\s*\d+\s*\.\s*/).map(function(x){return x.trim()}).filter(Boolean)}
-function secret(c){return !!c&&c.deck==='dumb'&&!isWho(c)&&G.hideDumb!==false}
+// Remain Dumb and Is That Really So? cards are private: only the person who drew one sees what is on it
+function secret(c){return !!c&&(c.deck==='dumb'||c.deck==='so')&&G.hideDumb!==false}
 function reduced(){return matchMedia('(prefers-reduced-motion:reduce)').matches}
 
 /* ---------------- road path traced over the printed board (1000 x 1000) ---------------- */
@@ -68,6 +69,7 @@ function iAmActor(){
   if(amHost())return true;                       // host acts for players without a phone
   return !ap&&me&&me.team===G.turn.team;
 }
+function iDrew(){var ap=activePlayer();return role!=='local'&&!!ap&&ap.id===myId}
 function actorName(){var ap=activePlayer();return ap?ap.name:('Team '+G.turn.team)}
 
 /* ---------------- cards ---------------- */
@@ -130,7 +132,7 @@ function handle(from,a){
       if(a.right){steps=isWho(G.card)?Math.max(1,hintsOf(G.card).length-G.hints+1):1;G.score[t]+=1}
       var from=G.pos[t],to=G.mode==='digital'?Math.min(N(),from+steps):from;
       G.pos[t]=to;G.anim={team:t,from:from,to:to,k:rid(),right:!!a.right};
-      G.result={right:!!a.right,team:t,who:actorName(),steps:steps,answer:G.card.answer||'',deck:G.card.deck,whoAmI:isWho(G.card),hints:G.hints,secretPrompt:secret(G.card)?G.card.prompt:''};
+      G.result={right:!!a.right,team:t,who:actorName(),steps:steps,answer:G.card.answer||'',deck:G.card.deck,whoAmI:isWho(G.card),hints:G.hints,secretPrompt:secret(G.card)?G.card.prompt:'',priv:secret(G.card),drawer:(activePlayer()||{}).id||null};
       G.timer=null;G.phase='result';
       if(G.mode==='digital'&&to>=N())G.winner=t;
       break;
@@ -354,7 +356,7 @@ function pilesEl(canPick){
 }
 
 /* ---------------- the card ---------------- */
-var shownCardK=null,cardEl=null,peek=false,flipTimer=null,flipped=false;
+var shownCardK=null,cardEl=null,peek=false,flipTimer=null,flipped=false,peekCard=false;
 function cardFace(c,showAnswer){
   var d=DK[c.deck]||DECKS[0];
   var body=h('div',{'class':'body'});
@@ -376,7 +378,7 @@ function showCardLayer(){
   var L=$('cardLayer'),c=G.card,spot=$('spot');
   if(!(G.phase==='card'&&c)){L.classList.remove('on');spot.textContent='';$('cctl').textContent='';shownCardK=null;cardEl=null;clearTimeout(flipTimer);return}
   if(c.k!==shownCardK){
-    shownCardK=c.k;peek=false;flipped=false;clearTimeout(flipTimer);spot.textContent='';
+    shownCardK=c.k;peek=false;peekCard=false;flipped=false;clearTimeout(flipTimer);spot.textContent='';
     cardEl=h('div',{'class':'card'});spot.appendChild(cardEl);
     var startFly=function(){
       if(shownCardK!==c.k)return;
@@ -402,8 +404,11 @@ function showCardLayer(){
 function paintCard(){
   if(!cardEl||!G.card)return;
   var c=G.card,actor=iAmActor(),d=DK[c.deck];
-  var hide=secret(c)&&!actor;
-  var back=h('div',{'class':'side back',style:'--c:'+d.c+';background-image:url('+d.art+')'},[hide&&flipped?h('div',{'class':'cap',text:actorName()+' has this card'}):null]);
+  // the drawer's own phone shows the card; a shared screen acting for someone shows it only while they tap Show card
+  var hide=secret(c)&&!(iDrew()||(actor&&peekCard));
+  var cap=isWho(c)?('Who am I? · '+actorName()+' has the hints'):(actorName()+' has this card');
+  if(hide&&actor)cap='Tap Show card when only '+actorName()+' is looking';
+  var back=h('div',{'class':'side back',style:'--c:'+d.c+';background-image:url('+d.art+')'},[hide&&flipped?h('div',{'class':'cap',text:cap}):null]);
   var face=cardFace(c,actor&&peek);
   if(G.timer&&G.timer.end)face.appendChild(h('div',{'class':'tbar'},[h('i',{id:'tbarFill'})]));
   cardEl.textContent='';cardEl.appendChild(back);cardEl.appendChild(face);
@@ -412,7 +417,8 @@ function paintCard(){
 }
 function paintControls(){
   var box=$('cctl');box.textContent='';var c=G.card;if(!c)return;
-  if(!iAmActor()){box.appendChild(h('div',{'class':'waiting',style:'color:#fff',text:secret(c)?actorName()+' is acting it out. Watch and guess!':(isWho(c)?'Guess who it is! '+actorName()+' reveals the hints.':actorName()+' is reading the card')}));return}
+  if(!iAmActor()){box.appendChild(h('div',{'class':'waiting',style:'color:#fff',text:isWho(c)?'Guess who it is! '+actorName()+' reads the hints.':secret(c)?(c.deck==='dumb'?actorName()+' is acting it out. Watch and guess!':actorName()+' is asking the question'):actorName()+' is reading the card'}));return}
+  if(secret(c)&&!iDrew())box.appendChild(h('div',{'class':'row'},[h('button',{type:'button','class':'btn go',text:peekCard?'Hide card':'Show card',on:{click:function(){peekCard=!peekCard;if(!peekCard)peek=false;paintCard();paintControls()}}})]));
   var tr=h('div',{'class':'timers'},[h('span',{'class':'lbl',text:'Timer'})]);
   if(G.timer&&G.timer.end){tr.appendChild(h('button',{type:'button','class':'btn big',id:'tbig',text:'0:00','aria-label':'Stop the timer',on:{click:function(){act('timer',{dur:0})}}}));tr.appendChild(h('button',{type:'button','class':'btn',text:'Stop',on:{click:function(){act('timer',{dur:0})}}}))}
   else [30,40,60,90].forEach(function(n){tr.appendChild(h('button',{type:'button','class':'btn',text:n<60?n+'s':(n/60|0)+':'+('0'+n%60).slice(-2),on:{click:function(){act('timer',{dur:n})}}}))});
@@ -423,7 +429,7 @@ function paintControls(){
   }
   var row=h('div',{'class':'row'});
   if(isWho(c)&&G.hints<hintsOf(c).length)row.appendChild(h('button',{type:'button','class':'btn',text:'Next hint',on:{click:function(){act('hint')}}}));
-  if(c.answer)row.appendChild(h('button',{type:'button','class':'btn',text:peek?'Hide answer':'Show answer',on:{click:function(){peek=!peek;paintCard();paintControls()}}}));
+  if(c.answer&&(!secret(c)||iDrew()||peekCard))row.appendChild(h('button',{type:'button','class':'btn',text:peek?'Hide answer':'Show answer',on:{click:function(){peek=!peek;paintCard();paintControls()}}}));
   row.appendChild(h('button',{type:'button','class':'btn',text:'Skip card',on:{click:function(){act('skip')}}}));
   box.appendChild(row);
   box.appendChild(h('div',{'class':'row'},[h('button',{type:'button','class':'btn bad',text:'Missed it',on:{click:function(){act('judge',{right:false})}}}),h('button',{type:'button','class':'btn good',text:'Got it right',on:{click:function(){act('judge',{right:true})}}})]));
@@ -509,7 +515,8 @@ function render(){
   }else if(G.phase==='result'&&G.result){
     var r=G.result;
     var line=r.right?(digital?('Team '+r.team+' moves '+r.steps+(r.steps===1?' space':' spaces')):(r.whoAmI?('Move '+r.steps+(r.steps===1?' space':' spaces')+' on the board'):'Point for Team '+r.team)):'No move this time';
-    var extra=(r.secretPrompt?'\nThe card: '+r.secretPrompt.replace(/\n+/g,' '):'')+(r.answer?'\nAnswer: '+r.answer:'');
+    var mine=!r.priv||r.drawer===myId||role==='local';
+    var extra=mine?((r.secretPrompt?'\nThe card: '+r.secretPrompt.replace(/\n+/g,' '):'')+(r.answer?'\nAnswer: '+r.answer:'')):'';
     panel.appendChild(h('div',{'class':'result',style:'--rc:'+(r.right?'var(--good)':'var(--bad)')},[h('b',{text:r.right?'Correct!':'Missed it'}),line+extra]));
     if(iAmActor()||amHost())panel.appendChild(h('div',{'class':'row'},[h('button',{type:'button','class':'btn go',text:G.winner?'See the winner':'Next turn',on:{click:function(){act('next')}}})]));
     else panel.appendChild(h('div',{'class':'waiting',text:'Waiting for '+actorName()+' to continue'}));
@@ -546,8 +553,8 @@ function renderHome(stage,panel){
 function settingsEl(){
   var box=h('div',{'class':'settings'});
   if(G.mode==='digital')box.appendChild(h('div',{'class':'set'},[h('span',{text:'Dice'}),h('div',{'class':'seg'},[['digital','On-screen die'],['real','Real die']].map(function(o){return h('button',{type:'button','aria-pressed':String((G.dice||'digital')===o[0]),text:o[1],on:{click:function(){act('mode',{dice:o[0]})}}})}))]));
-  box.appendChild(h('div',{'class':'set'},[h('span',{text:'Remain Dumb cards'}),h('div',{'class':'seg'},[[true,'Hide on main screen'],[false,'Show to everyone']].map(function(o){return h('button',{type:'button','aria-pressed':String((G.hideDumb!==false)===o[0]),text:o[1],on:{click:function(){act('mode',{hideDumb:o[0]})}}})}))]));
-  box.appendChild(h('p',{'class':'fine',text:G.hideDumb!==false?'Remain Dumb cards show only their card back on the main screen. The person who drew it sees the card on their own phone.':'Remain Dumb cards are shown on every screen.'}));
+  box.appendChild(h('div',{'class':'set'},[h('span',{text:'Remain Dumb and Is That Really So? cards'}),h('div',{'class':'seg'},[[true,'Only the drawer sees them'],[false,'Show to everyone']].map(function(o){return h('button',{type:'button','aria-pressed':String((G.hideDumb!==false)===o[0]),text:o[1],on:{click:function(){act('mode',{hideDumb:o[0]})}}})}))]));
+  box.appendChild(h('p',{'class':'fine',text:G.hideDumb!==false?'The main screen shows only the card art. The person who drew the card sees it, and its answer, on their own phone.':'These cards are shown on every screen.'}));
   return box;
 }
 function renderWait(stage,panel){
