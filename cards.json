@@ -1,7 +1,7 @@
 {
  "dumb-01": {
   "deck": "dumb",
-  "prompt": "Who am I?\n\n1. I am not an Israelite, but my faith made me one of them...\n\n2. My name means friendship\n\n3. From famine to favor, I became mother of kings",
+  "prompt": "Who am I?\n\n1. I am not an Israelite, but my faith made me one of them...\n\n2. my name means friendship\n\n3. From Famine to Favor, I became mother of kings",
   "options": [],
   "answer": "Ruth",
   "note": "",
@@ -17,15 +17,15 @@
  },
  "dumb-03": {
   "deck": "dumb",
-  "prompt": "Who am I?\n\n1. I had many talents\n\n2. I am compared to Jesus\n\n3. I loved seeing profits",
+  "prompt": "Who am I?\n\n1. I Had many talents\n\n2. I am compared to Jesus\n\n3. I loved seeing profits",
   "options": [],
-  "answer": "The Master in the Parable of the Talents",
+  "answer": "The Master in the Parable of Talents",
   "note": "",
   "n": 57
  },
  "dumb-04": {
   "deck": "dumb",
-  "prompt": "Who am I?\n\n1. I had a speech impediment, but was still used by God.\n\n2. Jehovah used me to help lead his people.\n\n3. In 1999 I became a member of the Governing Body.",
+  "prompt": "Who Am I?\n\n1. I had a speech impediment, but was still used by God.\n\n2. Jehovah used to me to help lead his people.\n\n3. In 1999 I became a member of the governing body.",
   "options": [],
   "answer": "Brother Lett",
   "note": "",
@@ -49,7 +49,7 @@
  },
  "dumb-07": {
   "deck": "dumb",
-  "prompt": "Who am I?\n\n1. I finished many books before finishing a sentence\n\n2. I went from prestige to chains\n\n3. A miracle disabled me",
+  "prompt": "Who Am I?\n\n1. I finished many books before finishing a sentence\n\n2. I went from prestige to chains\n\n3.A Miracle disabled me",
   "options": [],
   "answer": "Paul",
   "note": "",
@@ -73,7 +73,7 @@
  },
  "dumb-10": {
   "deck": "dumb",
-  "prompt": "Have 3 people act out the garden of Eden...",
+  "prompt": "Have 3 people act out the garden of eden...",
   "options": [],
   "answer": "",
   "note": "40 seconds to get it right",
@@ -97,7 +97,7 @@
  },
  "dumb-13": {
   "deck": "dumb",
-  "prompt": "Whoever rolled the dice must act out Jesus in some way...",
+  "prompt": "Who ever rolled the dice must act out Jesus in some way...",
   "options": [],
   "answer": "",
   "note": "",
@@ -105,7 +105,7 @@
  },
  "dumb-14": {
   "deck": "dumb",
-  "prompt": "3 people act out life in the new world...",
+  "prompt": "3 People act out life in the new world...",
   "options": [],
   "answer": "",
   "note": "",
@@ -113,7 +113,7 @@
  },
  "dumb-15": {
   "deck": "dumb",
-  "prompt": "David slaying Goliath... 2 people",
+  "prompt": "David Slaying Goliath... 2 people",
   "options": [],
   "answer": "",
   "note": "",
@@ -121,7 +121,7 @@
  },
  "dumb-16": {
   "deck": "dumb",
-  "prompt": "Have 3 people act out Moses, Aaron, and Pharaoh",
+  "prompt": "Have 3 people act out Moses, Aaron, and Pharoah",
   "options": [],
   "answer": "",
   "note": "What category does this fit into most?",
@@ -129,7 +129,7 @@
  },
  "dumb-17": {
   "deck": "dumb",
-  "prompt": "1 person acts out John the Baptist...",
+  "prompt": "1 Person acts out John the Baptist...",
   "options": [],
   "answer": "",
   "note": "",
@@ -137,7 +137,7 @@
  },
  "dumb-18": {
   "deck": "dumb",
-  "prompt": "Draw Jesus' temptation in the wilderness...",
+  "prompt": "Draw Jesus Temptation in the wilderness...",
   "options": [],
   "answer": "",
   "note": "",
@@ -345,7 +345,7 @@
  },
  "lot-01": {
   "deck": "lot",
-  "prompt": "Which Apostle was Peter's brother?",
+  "prompt": "Which Apostle was Peter's Brother?",
   "options": [
    "Matthew",
    "Philip",
@@ -358,10 +358,10 @@
  },
  "lot-02": {
   "deck": "lot",
-  "prompt": "Famously termed by Brother Rutherford in 1935 during a dedication talk, where was the first official Kingdom Hall?",
+  "prompt": "Famously termed by Brother Rutherford in 1935 during a dedication talk, Where was the first official Kingdom Hall?",
   "options": [
-   "Pittsburgh, PA",
-   "Honolulu, Hawaii",
+   "Pittsburgh ,PA",
+   "Honolulu,Hawaii",
    "NYC, NY",
    "Columbus, OH"
   ],
@@ -371,7 +371,7 @@
  },
  "lot-03": {
   "deck": "lot",
-  "prompt": "How many Bible writers were there?",
+  "prompt": "How many Bible Writers were there?",
   "options": [
    "18",
    "31",
@@ -412,12 +412,12 @@
   "deck": "lot",
   "prompt": "Which president of the United States was raised around the truth?",
   "options": [
-   "Donald Trump",
+   "Dondald Trump",
    "Roosevelt",
    "Eisenhower",
    "George W. Bush"
   ],
-  "answer": "C. Eisenhower\n\nThe Eisenhower brothers would like to find a graceful way to announce that their mother was not, at heart, a Jehovah's Witness... How could that be true, when she wrote Boeckel in 1944 that she was “a witness of and for the Great Jehovah of Hosts (I have been such for the past 49 years)”?",
+  "answer": "The Eisenhower brothers would like to find a graceful way to announce that their mother was not, at heart, a Jehovah’s Witness... How could that be true, when she wrote Boeckel in 1944 that she was “a witness of and for the Great Jehovah of Hosts (I have been such for the past 49 years)”?",
   "note": "",
   "n": 6
  },
@@ -438,26 +438,26 @@
   "deck": "lot",
   "prompt": "True or False.\n\nWatchtower Library predates Google",
   "options": [],
-  "answer": "True! Watchtower Library CD-ROM was first released in 1993, Google being founded in 1998.",
+  "answer": "True! Watchtower Library CDROM was first released in 1993, Google being founded in 1998.",
   "note": "",
   "n": 8
  },
  "lot-09": {
   "deck": "lot",
-  "prompt": "How many shekels was Joseph sold as a slave for?",
+  "prompt": "How many sheckels was Joseph sold as a slave for?",
   "options": [
    "200",
    "20",
    "5",
    "Free"
   ],
-  "answer": "B. 20, the value of about $176 today. Exodus 21:32 said the going rate of a slave was 30 shekels, Joseph was sold at a discount by his brothers.",
+  "answer": "B. 20, the value of about 176$ today. Exodus 21:32 said the going rate of a slave was 30 Shekels, Joseph was sold at a discount by his brothers.",
   "note": "",
   "n": 9
  },
  "lot-10": {
   "deck": "lot",
-  "prompt": "Share a point that has recently strengthened your faith.\n\nAlso... What is the first city mentioned in the Bible?",
+  "prompt": "Share a point that has recently strengthened your faith\n\nAlso... What is the first city mentioned in the Bible?",
   "options": [
    "Babylon",
    "Nineveh",
@@ -477,7 +477,7 @@
    "Darkness",
    "Locust infestation"
   ],
-  "answer": "B. Water into blood",
+  "answer": "B. Water Into blood",
   "note": "",
   "n": 11
  },
@@ -496,14 +496,14 @@
  },
  "lot-13": {
   "deck": "lot",
-  "prompt": "Who is the longest serving member of the Governing Body today?",
+  "prompt": "Who is the longest serving member of the Governing body today?",
   "options": [
    "Lett",
    "Herd",
    "Lösch",
    "Splane"
   ],
-  "answer": "C. Lösch, 1994 (Herd being the oldest, 88)",
+  "answer": "C. Losche, 1994.(Herd being the oldest, 88)",
   "note": "",
   "n": 13
  },
@@ -535,20 +535,20 @@
  },
  "lot-16": {
   "deck": "lot",
-  "prompt": "What is Brother Sanderson's favorite series?",
+  "prompt": "What is brother Sanderson's favorite series?",
   "options": [
    "Spiderman",
-   "Star Trek",
-   "Star Wars",
+   "Star-trek",
+   "Star wars",
    "The Office"
   ],
-  "answer": "Star Wars, we talked about it at the Bethel grocery store",
+  "answer": "Star Wars, we talked about it at the bethel grocery store",
   "note": "",
   "n": 16
  },
  "lot-17": {
   "deck": "lot",
-  "prompt": "How long were the Israelites in Egypt?",
+  "prompt": "How long were Israelites in Egypt?",
   "options": [
    "215 years",
    "820 years",
@@ -634,7 +634,7 @@
  },
  "so-02": {
   "deck": "so",
-  "prompt": "Which book of the Bible holds the most messianic prophecies?",
+  "prompt": "Which Book of the Bible holds the most messianic prophecies?",
   "options": [],
   "answer": "Isaiah, over 40",
   "note": "",
@@ -644,15 +644,15 @@
   "deck": "so",
   "prompt": "Explain the illustration of the 10 Virgins meaning...",
   "options": [],
-  "answer": "Small group of anointed men who would take the lead among Christ's followers during the last days. Jesus warned those men that they must remain faithful. Next, he broadened his focus and gave this parable to admonish all his anointed followers in the last days to “keep on the watch” lest they miss out on their precious reward.",
+  "answer": "small group of anointed men who would take the lead among Christ’s followers during the last days. Jesus warned those men that they must remain faithful. Next, he broadened his focus and gave this parable to admonish all his anointed followers in the last days to “keep on the watch” lest they miss out on their precious reward.",
   "note": "",
   "n": 39
  },
  "so-04": {
   "deck": "so",
-  "prompt": "Which of these qualities does Jehovah NOT have? And why..\n\nJealousy..\nModesty..\nZeal..\nOmnipotence..",
+  "prompt": "Which of these qualities does Jehovah NOT have? and why..\n\nJealousy..\nModesty..\nZeal..\nOmnipotence..",
   "options": [],
-  "answer": "Modesty, as used in the Scriptures, suggests a proper awareness of one's own limitations. The Almighty has no limitations except for those he imposes upon himself because of his own righteous standards. (Mark 10:27; Titus 1:2) Furthermore, as the Most High, he is subject to no one. So the concept of modesty simply does not apply to Jehovah.",
+  "answer": "Modesty, as used in the Scriptures, suggests a proper awareness of one’s own limitations. The Almighty has no limitations except for those he imposes upon himself because of his own righteous standards. (Mark 10:27; Titus 1:2) Furthermore, as the Most High, he is subject to no one. So the concept of modesty simply does not apply to Jehovah.",
   "note": "",
   "n": 40
  },
@@ -664,7 +664,7 @@
    "Chromhidrosis",
    "Night Sweats"
   ],
-  "answer": "A. Cases of extremely high stress release hormones that can intensely rupture the blood vessels in your skin",
+  "answer": "A. Cases of extremely high stress release hormones that can intensly rupture the blood vessels in your skin",
   "note": "",
   "n": 41
  },
@@ -672,7 +672,7 @@
   "deck": "so",
   "prompt": "Explain who Gog of Magog is...",
   "options": [],
-  "answer": "Gog of Magog refers to a coalition of earthly nations that will attack pure worshippers during the great tribulation. During the final test at the end of the 1,000 years, those who rebel against Jehovah will manifest the same murderous attitude as ‘Gog of Magog.’",
+  "answer": "Gog of Magog refers to a coalition of earthly nations that will attack pure worshippers during the great tribulation.During the final test at the end of the 1,000 years, those who rebel against Jehovah will manifest the same murderous attitude as ‘Gog of Magog,’",
   "note": "",
   "n": 42
  },
@@ -688,7 +688,7 @@
   "deck": "so",
   "prompt": "Chronologically, which book of the Bible was written last?",
   "options": [],
-  "answer": "NOT Revelation (96 CE). (98 CE) John, 1 John, 2 John, 3 John.",
+  "answer": "NOT Revelation (96 CE),\n(98 CE) John, 1 John, 2 John, 3 John.",
   "note": "",
   "n": 44
  },
@@ -712,7 +712,7 @@
   "deck": "so",
   "prompt": "Has Jehovah always been sovereign? If not, when did he become sovereign?",
   "options": [],
-  "answer": "Sovereignty = Right to rule. Before Jesus, Jehovah ruled over no one.",
+  "answer": "Sovereignty= Right to rule. Before Jesus Jehovah ruled over no one.",
   "note": "",
   "n": 47
  },
@@ -720,7 +720,7 @@
   "deck": "so",
   "prompt": "Who founded the first empire?",
   "options": [],
-  "answer": "Nimrod apparently remained at Babel and expanded his dominion, founding the first empire.\n\nNot long after the Flood, the Devil apparently used Nimrod, a man notorious for his “opposition to Jehovah,” in an effort to unite all mankind in a form of worship that would again be opposed to Jehovah. (Genesis 10:8, 9; 11:2-4) It would have been one united false religion, unified Devil worship, centered on the city and the tower that his worshipers built.",
+  "answer": "Nimrod apparently remained at Babel and expanded his dominion, founding the first Empire.\nNot long after the Flood, the Devil apparently used Nimrod, a man notorious for his “opposition to Jehovah,” in an effort to unite all mankind in a form of worship that would again be opposed to Jehovah. (Genesis 10:8, 9; 11:2-4) It would have been one united false religion, unified Devil worship, centered on the city and the tower that his worshipers built.",
   "note": "",
   "n": 48
  },
@@ -734,15 +734,15 @@
  },
  "so-14": {
   "deck": "so",
-  "prompt": "What decade did modern Christians stop using the cross?",
+  "prompt": "What decade did Modern Christians stop using the cross?",
   "options": [],
-  "answer": "1920's, gradually discontinued",
+  "answer": "1920's gradually discontinued",
   "note": "",
   "n": 50
  },
  "so-15": {
   "deck": "so",
-  "prompt": "Which New Testament book was actually written in Hebrew?",
+  "prompt": "Which New Testement book was actually written in Hebrew?",
   "options": [],
   "answer": "Matthew, only book first written in Hebrew. It 2-204",
   "note": "",
@@ -760,7 +760,7 @@
   "deck": "so",
   "prompt": "Who is the first recorded man to ever experience flight?",
   "options": [],
-  "answer": "Racing through earth's atmosphere, the fiery chariot evidently transferred Elijah to another part of the earth, where he continued living for a time. Years later, in fact, Elijah wrote a letter to Jehoram, the king of Judah. —2 Chronicles 21:1, 12-15.",
+  "answer": "Racing through earth’s atmosphere, the fiery chariot evidently transferred Elijah to another part of the earth, where he continued living for a time. Years later, in fact, Elijah wrote a letter to Jehoram, the king of Judah.-2 Chronicles 21:1, 12-15.",
   "note": "",
   "n": 53
  },
@@ -806,9 +806,9 @@
  },
  "written-01": {
   "deck": "written",
-  "prompt": "What appendix has recently been added to our New World Translation?",
+  "prompt": "What apendix has recently been added to our new world translation?",
   "options": [],
-  "answer": "Appendix C 1-4, discuss it together",
+  "answer": "Apendix C 1-4, discuss it together",
   "note": "",
   "n": 19
  },
@@ -816,20 +816,20 @@
   "deck": "written",
   "prompt": "Out of these Bible currencies which one was worth the most?",
   "options": [
-   "Shekel",
+   "Sheckel",
    "Daric",
    "Denarius",
    "Lepton"
   ],
-  "answer": "Denarius = 1 day's wage ($80)\nDaric = $700\nShekel = weight unit, worth $15 today\nLepton = a few dollars today, worth 15 minutes of your time",
+  "answer": "Denarius = 1 days wage(80$)\nDaric = 700$\nSheckel = Weigh unit, worth 15$ today\nLepton a few dollars today worth 15 minutes of your time",
   "note": "",
   "n": 20
  },
  "written-03": {
   "deck": "written",
-  "prompt": "What is the theme of the Bible?",
+  "prompt": "What is the theme of The Bible?",
   "options": [],
-  "answer": "How Jehovah will clear his name, restore his rulership by means of his Kingdom. Source: intro Bible video",
+  "answer": "How Jehovah will clear his name, restore his rulership by means of his kingdom. Source, intro Bible Video",
   "note": "",
   "n": 21
  },
@@ -843,7 +843,7 @@
  },
  "written-05": {
   "deck": "written",
-  "prompt": "What is the Pentateuch?",
+  "prompt": "What is the pentatuch?",
   "options": [],
   "answer": "First 5 books of the Bible",
   "note": "",
@@ -869,7 +869,7 @@
   "deck": "written",
   "prompt": "What is Tartarus?",
   "options": [],
-  "answer": "Prisonlike abased condition into which the disobedient angels of Noah's day were cast... abased by God from their heavenly place and privileges... deepest mental darkness... representing everlasting destruction they will experience",
+  "answer": "prisonlike abased condition into which the disobedient angels of Noah’s day were cast... abased by God from their heavenly place and privileges... eepest mental darkness... representing everlasting destruction they will experience",
   "note": "",
   "n": 26
  },
@@ -891,7 +891,7 @@
  },
  "written-11": {
   "deck": "written",
-  "prompt": "What scripture would you use to disprove the Trinity and why?",
+  "prompt": "What scripture would you use to disprove thhe trinity and why?",
   "options": [],
   "answer": "",
   "note": "",
@@ -909,7 +909,7 @@
   "deck": "written",
   "prompt": "Quote Psalms 83:18",
   "options": [],
-  "answer": "“May people know that you, whose name is Jehovah, You alone are the Most High over all the earth.”",
+  "answer": "\"May people know that you, whose name is Jehovah, You alone are the Most High over all the earth.\"",
   "note": "",
   "n": 31
  },
@@ -917,7 +917,7 @@
   "deck": "written",
   "prompt": "In Genesis 3:15 the first Bible prophecy is given, explain who the following represent...",
   "options": [],
-  "answer": "Woman = Heavenly part of Organization\nOffspring of the woman = Jesus Christ and 144,000\nOffspring of the serpent = Demons, and humans who oppose Jehovah\nThe Serpent = Satan the Devil",
+  "answer": "Woman = Heavenly part of Organization\n\nOffspring of the woman = Jesus Christ and 144,000\n\nOffspring of the serpent = Demons, and humans who oppose Jehovah\n\nThe Serpent = Satan the devil",
   "note": "",
   "n": 32
  },
@@ -925,8 +925,8 @@
   "deck": "written",
   "prompt": "How many years did it take for the scriptures to be completed?",
   "options": [],
-  "answer": "1,680 years",
-  "note": "Have both groups guess, whoever gets closest",
+  "answer": "1,680 years, have both groups guess whoever gets closest",
+  "note": "",
   "n": 33
  },
  "written-16": {
@@ -939,7 +939,7 @@
  },
  "written-17": {
   "deck": "written",
-  "prompt": "What scripture tells us to “Pray Constantly”?",
+  "prompt": "What scripture tells us to \"Pray Constantly\"?",
   "options": [],
   "answer": "1 Thessalonians 5:17",
   "note": "",
@@ -947,7 +947,7 @@
  },
  "written-18": {
   "deck": "written",
-  "prompt": "Which Bible book says the word “holy” the most?",
+  "prompt": "Which Bible Book says the word \"holy\" the most?",
   "options": [],
   "answer": "Leviticus",
   "note": "",

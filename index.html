@@ -204,12 +204,37 @@ img{max-width:100%}
 .qr{width:112px;flex:none}.qr svg{width:100%;height:auto;display:block}
 .pl.off span{opacity:.5}
 main.homeMain .panel{display:none}
+
+.slot rect.frame{fill:none;stroke:#2B1707;stroke-width:3}
+.slot.pickable{cursor:pointer}
+.slot.pickable rect.glow{fill:none;stroke:#FFD54A;stroke-width:10;animation:glow .9s ease-in-out infinite alternate}
+.nums{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.num{border:2px solid var(--ink);border-radius:8px;background:var(--c);color:var(--t);padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 3px 0 var(--ink);min-width:0}
+.num:active{transform:translateY(3px);box-shadow:none}
+.num b{font-family:var(--f-label);font-weight:400;font-size:24px;line-height:1}
+.num span{font-size:9px;letter-spacing:.04em;text-transform:uppercase;line-height:1.1;text-align:center}
+.settings{display:flex;flex-direction:column;gap:10px;background:var(--paper);border-radius:10px;padding:10px;border:2px solid var(--line)}
+.set{display:flex;flex-direction:column;gap:4px}
+.set>span{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.chip.code{background:var(--logo);border-color:var(--logo);color:#fff;font-size:12px;max-width:60vw;overflow:hidden;text-overflow:ellipsis}
+body.tv .mark{font-size:28px}
+body.tv .chip.code{font-size:20px;padding:8px 16px;max-width:none}
+body.tv .banner .who b{font-size:34px}
+body.tv .sc b{font-size:26px}
+body.tv .waiting,body.tv .hintline{font-size:18px}
+body.tv .result{font-size:20px}body.tv .result b{font-size:28px}
+@media (orientation:landscape) and (max-height:620px){
+  main{flex-direction:row;align-items:stretch}.stage{flex:1}.panel{width:42%;flex:none;justify-content:center;overflow-y:auto}
+  header.top{min-height:30px}#app{padding-block:4px 6px}
+  #cardLayer{flex-direction:row}.cstage{height:100%}.cctl{width:46%;max-width:none}
+}
 </style>
 </head>
 <body>
 <div id="app">
   <header class="top">
     <h1 class="mark">Road to Life</h1>
+    <span class="chip code" id="codeChip" hidden></span>
     <span class="chip timer" id="timerChip" hidden>0:40</span>
     <button class="chip" id="meChip" type="button"><i></i><span>Pick a team</span></button>
     <button class="ghost" id="menuBtn" type="button">Menu</button>

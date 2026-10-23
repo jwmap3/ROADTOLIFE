@@ -17,6 +17,16 @@ Card rules built in:
 - **Who am I?** cards reveal one hint at a time. Guessing on the first hint moves 3 spaces, the second 2, the last 1.
 - The timer starts with one tap (30s, 40s, 1:00 or 1:30) and shows on every screen.
 
+## Settings (host)
+
+- **Dice**: roll the on-screen die, or roll your real die and tap the number you got.
+- **Remain Dumb cards**: hide them on the main screen (only the person who drew it sees it on their phone), or show them to everyone.
+
+## Showing it on a TV
+
+- **Smart TV with a web browser** (Samsung, LG, Fire TV, Android TV): host from your phone, then open this site on the TV, type the room code and tap **Use this screen as the TV**.
+- **Roku or any TV without a browser**: screen-mirror (cast) the host phone to the TV and turn the phone sideways.
+
 ## Files
 
 - `index.html`, `game.js`: the whole app

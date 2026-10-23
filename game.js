@@ -12,11 +12,14 @@ var DECKS=[
  {id:'written',n:4,name:'For It Is Written',c:'#A3DEFF',t:'#12305C',art:'art/written.jpg',slot:[387,510,111,151]},
  {id:'dumb',n:5,name:'Remain Dumb',c:'#AC1FAC',t:'#fff',art:'art/dumb.jpg',slot:[514,510,111,151]}
 ];
-var DK={};DECKS.forEach(function(d){DK[d.id]=d});
+var PATCH={lot:'#FDD6A6',so:'#FDD6A9',last:'#FFDDB7',written:'#FFD4A7',dumb:'#FFD4A8'};
+var DK={};DECKS.forEach(function(d){DK[d.id]=d;var cx=d.slot[0]+d.slot[2]/2,cy=d.slot[1]+d.slot[3]/2,H=152,W=Math.round(H*9/16);d.card=[cx-W/2,cy-H/2-3,W,H]});
 var TEAMC={0:'var(--ink-soft)',1:'var(--t1)',2:'var(--t2)'};
 var TEAMHEX={1:['#13939E','#0A5C64'],2:['#B8366E','#731B41']};
 var LENS={short:10,standard:16,long:24};
 var PREFIX='roadtolife-jw-';
+var SITE=/^https?:/.test(location.protocol)?location.origin+location.pathname.replace(/index\.html$/,''):'https://jwmap3.github.io/ROADTOLIFE/';
+var EMBED=!!window.RTL_SEED;
 var CODECHARS='BCDFGHJKLMNPQRSTVWXZ';
 var $=function(id){return document.getElementById(id)};
 function h(tag,attrs,kids){var e=document.createElement(tag);if(attrs)for(var k in attrs){var v=attrs[k];if(v==null||v===false)continue;if(k==='text')e.textContent=v;else if(k==='on'){for(var ev in v)e.addEventListener(ev,v[ev])}else if(k==='style')e.style.cssText=v;else e.setAttribute(k,v===true?'':v)}(kids||[]).forEach(function(c){if(c)e.appendChild(typeof c==='string'?document.createTextNode(c):c)});return e}
@@ -30,7 +33,7 @@ function makeCode(){var c='';for(var i=0;i<4;i++)c+=CODECHARS[Math.floor(Math.ra
 function toast(msg){var t=$('toast');t.textContent=msg;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(function(){t.classList.remove('on')},2600)}
 function isWho(c){return !!c&&/^\s*who am i\??/i.test(c.prompt||'')}
 function hintsOf(c){var p=String(c.prompt||'').replace(/^\s*who am i\??\s*/i,'');return p.split(/(?:^|\n)\s*\d+\s*\.\s*/).map(function(x){return x.trim()}).filter(Boolean)}
-function secret(c){return !!c&&c.deck==='dumb'&&!isWho(c)}
+function secret(c){return !!c&&c.deck==='dumb'&&!isWho(c)&&G.hideDumb!==false}
 function reduced(){return matchMedia('(prefers-reduced-motion:reduce)').matches}
 
 /* ---------------- road path traced over the printed board (1000 x 1000) ---------------- */
@@ -49,9 +52,11 @@ var code=load('rtl.code',null);
 var baseCards={},myCards=load('rtl.mycards',{}),cards={};
 var piles=load('rtl.piles',{});
 var G=load('rtl.game',null)||newGame();
-function newGame(){return {e:rid(),v:0,phase:'lobby',mode:'digital',len:'standard',players:[],turn:{team:1,idx:{1:0,2:0}},pos:{1:0,2:0},score:{1:0,2:0},card:null,roll:null,hints:1,timer:null,anim:null,result:null,winner:null}}
+function newGame(){return {e:rid(),v:0,phase:'lobby',mode:'digital',len:'standard',players:[],turn:{team:1,idx:{1:0,2:0}},pos:{1:0,2:0},score:{1:0,2:0},card:null,roll:null,hints:1,timer:null,anim:null,result:null,winner:null,dice:'digital',hideDumb:true}}
 function N(){return LENS[G.len]||16}
 function amHost(){return role==='host'||role==='local'}
+function isTV(){return role==='client'&&!!me&&!!me.tv}
+function realDie(){return G.mode!=='digital'||G.dice==='real'}
 function teamPlayers(t){return G.players.filter(function(p){return p.team===t})}
 function activePlayer(){var l=teamPlayers(G.turn.team);return l.length?l[G.turn.idx[G.turn.team]%l.length]:null}
 function iAmActor(){
@@ -65,11 +70,27 @@ function iAmActor(){
 function actorName(){var ap=activePlayer();return ap?ap.name:('Team '+G.turn.team)}
 
 /* ---------------- cards ---------------- */
-function mergeCards(){cards={};Object.keys(baseCards).forEach(function(k){cards[k]=baseCards[k]});Object.keys(myCards).forEach(function(k){if(myCards[k]&&myCards[k].deleted)delete cards[k];else cards[k]=myCards[k]})}
+function sameCard(x,y){return !!x&&!!y&&x.deck===y.deck&&x.prompt===y.prompt&&String(x.answer||'')===String(y.answer||'')&&String(x.note||'')===String(y.note||'')&&JSON.stringify(x.options||[])===JSON.stringify(y.options||[])}
+function mergeCards(){
+  if(EMBED){cards=load('rtl.local',{})||{};return}
+  cards={};Object.keys(baseCards).forEach(function(k){cards[k]=baseCards[k]});Object.keys(myCards).forEach(function(k){if(myCards[k]&&myCards[k].deleted)delete cards[k];else cards[k]=myCards[k]});
+}
 function loadCards(){
+  if(EMBED){
+    // the phone app keeps its own card list (including cards added on the phone); bring in new and corrected cards without touching the phone's own
+    var store=load('rtl.local',null)||{},seen=load('rtl.seeded',{})||{},seed=window.RTL_SEED||{},old=window.RTL_OLD||{};
+    Object.keys(seed).forEach(function(k){
+      if(!store[k]){if(!seen[k])store[k]=seed[k]}
+      else if(old[k]&&sameCard(store[k],old[k]))store[k]=seed[k];
+      seen[k]=1;
+    });
+    save('rtl.local',store);save('rtl.seeded',seen);cards=store;return;
+  }
   fetch('cards.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){baseCards=j||{};save('rtl.basecards',baseCards);mergeCards();if(sheetView==='cards')openCards()})
   .catch(function(){baseCards=load('rtl.basecards',{});mergeCards()});
 }
+function saveCard(id,data){if(EMBED){cards[id]=data;save('rtl.local',cards)}else{myCards[id]=data;save('rtl.mycards',myCards);mergeCards()}}
+function deleteCard(id){if(EMBED){delete cards[id];save('rtl.local',cards)}else{myCards[id]={deleted:true};save('rtl.mycards',myCards);mergeCards()}}
 baseCards=load('rtl.basecards',{});mergeCards();
 function idsOf(deck){return Object.keys(cards).filter(function(id){return cards[id]&&cards[id].deck===deck})}
 function drawFrom(deck){
@@ -81,20 +102,21 @@ function drawFrom(deck){
 }
 
 /* ---------------- host: the rules ---------------- */
-function commit(){G.v++;save('rtl.game',G);broadcast();render()}
+function commit(){G.v++;save('rtl.game',G);broadcast();render();if(sheetView==='settings'&&settingsPaint)settingsPaint()}
 function handle(from,a){
   if(!a||typeof a!=='object')return;
   var isHost=from===myId;
   var ap=activePlayer();
   var actorOK=isHost||(ap?ap.id===from:playerTeam(from)===G.turn.team);
   switch(a.t){
-    case 'mode': if(!isHost)return;if(a.mode==='board'||a.mode==='digital')G.mode=a.mode;if(LENS[a.len])G.len=a.len;break;
+    case 'mode': if(!isHost)return;if(a.mode==='board'||a.mode==='digital')G.mode=a.mode;if(LENS[a.len])G.len=a.len;if(a.dice==='digital'||a.dice==='real')G.dice=a.dice;if(typeof a.hideDumb==='boolean')G.hideDumb=a.hideDumb;break;
     case 'start': if(!isHost)return;G.pos={1:0,2:0};G.score={1:0,2:0};G.turn={team:1,idx:{1:0,2:0}};G.winner=null;G.result=null;G.card=null;G.roll=null;G.anim=null;G.timer=null;G.phase='turn';break;
     case 'lobby': if(!isHost)return;G.phase='lobby';G.card=null;G.roll=null;G.timer=null;G.result=null;break;
     case 'addp': if(!isHost)return;G.players.push({id:'m'+rid(),name:String(a.name).slice(0,24),team:a.team===2?2:1,manual:true});break;
     case 'delp': if(!isHost)return;G.players=G.players.filter(function(p){return p.id!==a.id});break;
     case 'roll': case 'pick':
       if(!actorOK||G.phase!=='turn')return;
+      if(a.t==='roll'&&!(G.mode==='digital'&&G.dice!=='real'))return;
       var n=a.t==='roll'?1+Math.floor(Math.random()*5):Number(a.n);var d=DECKS[n-1];if(!d)return;
       var c=drawFrom(d.id);if(!c){toast(d.name+' has no cards yet');return}
       G.roll={n:n,deck:d.id,k:rid(),dice:a.t==='roll'};G.card=c;G.hints=1;G.timer=null;G.result=null;G.phase='card';break;
@@ -195,7 +217,7 @@ function dial(){
   c.on('data',function(m){if(m&&m.type==='state'&&m.g&&typeof m.g==='object')applyState(m.g)});
   c.on('close',function(){if(hostConn===c){net='lost';render();setTimeout(dial,2500)}});
 }
-function sendMe(){if(role==='client'&&hostConn&&hostConn.open){try{hostConn.send({type:'hello',id:myId,team:me?me.team:0,name:me?me.name:''})}catch(e){}}else if(amHost())hostSelf()}
+function sendMe(){if(role==='client'&&hostConn&&hostConn.open){try{hostConn.send({type:'hello',id:myId,team:me?me.team:0,name:me?me.name:'',tv:!!(me&&me.tv)})}catch(e){}}else if(amHost())hostSelf()}
 function applyState(g){
   if(g.timer&&typeof g.timer.left==='number'){var old=G.timer;g.timer.end=(old&&old.k===g.timer.k&&old.end)?old.end:Date.now()+g.timer.left}
   G=g;save('rtl.game',G);render();
@@ -215,21 +237,23 @@ function buildBoard(){
   var defs=s('defs',{});
   [1,2].forEach(function(t){var g=s('radialGradient',{id:'pg'+t,cx:'35%',cy:'30%',r:'75%'});g.appendChild(s('stop',{offset:'0%','stop-color':'#fff','stop-opacity':'.85'}));g.appendChild(s('stop',{offset:'28%','stop-color':TEAMHEX[t][0]}));g.appendChild(s('stop',{offset:'100%','stop-color':TEAMHEX[t][1]}));defs.appendChild(g)});
   var cg=s('radialGradient',{id:'cg'});cg.appendChild(s('stop',{offset:'0%','stop-color':'#FFE27A','stop-opacity':'.95'}));cg.appendChild(s('stop',{offset:'100%','stop-color':'#FFE27A','stop-opacity':'0'}));defs.appendChild(cg);
-  DECKS.forEach(function(d){var cp=s('clipPath',{id:'cl'+d.id});cp.appendChild(s('rect',{x:d.slot[0],y:d.slot[1],width:d.slot[2],height:d.slot[3],rx:8}));defs.appendChild(cp)});
+  DECKS.forEach(function(d){var cp=s('clipPath',{id:'cl'+d.id});cp.appendChild(s('rect',{x:d.card[0],y:d.card[1],width:d.card[2],height:d.card[3],rx:7}));defs.appendChild(cp)});
   svgEl.appendChild(defs);
   svgEl.appendChild(s('circle',{'class':'crownglow',cx:825,cy:345,r:120}));
   svgEl.appendChild(s('path',{'class':'trail',d:'M'+CURVE.map(function(p){return p[0].toFixed(1)+' '+p[1].toFixed(1)}).join(' L')}));
   svgEl.appendChild(s('g',{id:'spaces'}));
   var slots=s('g',{id:'slots'});
   DECKS.forEach(function(d){
-    var g=s('g',{'class':'slot','data-deck':d.id});
-    g.appendChild(s('rect',{'class':'glow',x:d.slot[0]-4,y:d.slot[1]-4,width:d.slot[2]+8,height:d.slot[3]+8,rx:12}));
-    g.appendChild(s('rect',{x:d.slot[0]+6,y:d.slot[1]+6,width:d.slot[2],height:d.slot[3],rx:8,fill:d.c,stroke:'#2B1707','stroke-width':2}));
-    g.appendChild(s('rect',{x:d.slot[0]+3,y:d.slot[1]+3,width:d.slot[2],height:d.slot[3],rx:8,fill:d.c,stroke:'#2B1707','stroke-width':2}));
-    g.appendChild(s('image',{href:d.art,x:d.slot[0],y:d.slot[1],width:d.slot[2],height:d.slot[3],preserveAspectRatio:'xMidYMid slice','clip-path':'url(#cl'+d.id+')'}));
-    g.appendChild(s('rect',{'class':'frame',x:d.slot[0],y:d.slot[1],width:d.slot[2],height:d.slot[3],rx:8}));
-    var bub=s('circle',{cx:d.slot[0]+4,cy:d.slot[1]+4,r:17,fill:'#2B1707',stroke:'#fff','stroke-width':3});g.appendChild(bub);
-    var tx=s('text',{x:d.slot[0]+4,y:d.slot[1]+5});tx.textContent=d.n;g.appendChild(tx);
+    var c=d.card,g=s('g',{'class':'slot','data-deck':d.id});
+    g.appendChild(s('rect',{x:d.slot[0]-6,y:d.slot[1]-6,width:d.slot[2]+12,height:d.slot[3]+12,rx:12,fill:PATCH[d.id]}));
+    g.appendChild(s('rect',{'class':'glow',x:c[0]-6,y:c[1]-6,width:c[2]+12,height:c[3]+16,rx:11}));
+    g.appendChild(s('rect',{x:c[0],y:c[1]+7,width:c[2],height:c[3],rx:7,fill:d.c,stroke:'#2B1707','stroke-width':2}));
+    g.appendChild(s('rect',{x:c[0],y:c[1]+3.5,width:c[2],height:c[3],rx:7,fill:d.c,stroke:'#2B1707','stroke-width':2}));
+    g.appendChild(s('image',{href:d.art,x:c[0],y:c[1],width:c[2],height:c[3],preserveAspectRatio:'xMidYMid meet','clip-path':'url(#cl'+d.id+')'}));
+    g.appendChild(s('rect',{'class':'frame',x:c[0],y:c[1],width:c[2],height:c[3],rx:7}));
+    g.appendChild(s('circle',{cx:c[0]+2,cy:c[1]+2,r:16,fill:'#2B1707',stroke:'#fff','stroke-width':3}));
+    var tx=s('text',{x:c[0]+2,y:c[1]+3});tx.textContent=d.n;g.appendChild(tx);
+    g.addEventListener('click',function(){if(g.classList.contains('pickable'))act('pick',{n:d.n})});
     slots.appendChild(g);
   });
   svgEl.appendChild(slots);
@@ -430,7 +454,9 @@ function celebrate(){if(wonShown===G.e)return;wonShown=G.e;confetti();toast('Tea
 function render(){
   var mc=$('meChip');mc.style.setProperty('--tc',TEAMC[me?me.team:0]);
   mc.lastChild.textContent=!me?'Pick a team':(me.team?('Team '+me.team+(me.name?' · '+me.name:'')):'Host screen');
-  mc.hidden=!role;$('menuBtn').hidden=!role;
+  mc.hidden=!role||isTV();$('menuBtn').hidden=!role;
+  document.body.classList.toggle('tv',isTV());
+  var cc=$('codeChip');cc.hidden=!((role==='host'||isTV())&&code&&G.phase!=='lobby');cc.textContent='Join: '+SITE.replace(/^https?:\/\//,'').replace(/\/$/,'')+' · '+code;
   var stage=$('stage'),panel=$('panel');
   $('main').classList.toggle('homeMain',!role);
   if(!role){renderHome(stage,panel);showCardLayer();return}
@@ -451,8 +477,10 @@ function render(){
     var target=G.phase==='turn'?G.pos[G.turn.team]+1:-1;
     svgEl.querySelectorAll('.space').forEach(function(g){var on=+g.getAttribute('data-i')===target;g.classList.toggle('target',on);g.style.setProperty('--tc',TEAMHEX[G.turn.team][0])});
     if(G.phase!=='card')hotSlot(null);
-    var canRoll=G.phase==='turn'&&iAmActor();
-    dieEl.classList.toggle('can',canRoll);if(G.phase==='turn')dieEl.classList.add('idle');
+    var canPick=G.phase==='turn'&&iAmActor();
+    dieEl.hidden=realDie();
+    dieEl.classList.toggle('can',canPick&&!realDie());if(G.phase==='turn')dieEl.classList.add('idle');
+    svgEl.querySelectorAll('.slot').forEach(function(g){g.classList.toggle('pickable',canPick&&realDie())});
   }else{
     stage.textContent='';stage.appendChild(pilesEl(G.phase==='turn'&&iAmActor()));
   }
@@ -464,9 +492,14 @@ function render(){
   ]));
   if(G.phase==='turn'){
     if(iAmActor()){
-      if(digital)panel.appendChild(h('div',{'class':'row'},[h('button',{type:'button','class':'btn go',text:'Roll the die',on:{click:function(){act('roll')}}})]));
-      panel.appendChild(h('div',{'class':'hintline',text:digital?'Roll 1 to 5. The number picks the pile.':'Roll your die, then tap the pile you landed on'}));
-    }else panel.appendChild(h('div',{'class':'waiting',text:digital?'Waiting for '+actorName()+' to roll':'Waiting for '+actorName()+' to pick a pile'}));
+      if(!realDie()){
+        panel.appendChild(h('div',{'class':'row'},[h('button',{type:'button','class':'btn go',text:'Roll the die',on:{click:function(){act('roll')}}})]));
+        panel.appendChild(h('div',{'class':'hintline',text:'Roll 1 to 5. The number picks the pile.'}));
+      }else if(digital){
+        panel.appendChild(h('div',{'class':'hintline',text:'Roll your die, then tap the number you rolled'}));
+        panel.appendChild(h('div',{'class':'nums'},DECKS.map(function(d){return h('button',{type:'button','class':'num',style:'--c:'+d.c+';--t:'+d.t,'aria-label':d.n+': '+d.name,on:{click:function(){act('pick',{n:d.n})}}},[h('b',{text:String(d.n)}),h('span',{text:d.name})])})));
+      }else panel.appendChild(h('div',{'class':'hintline',text:'Roll your die, then tap the pile you landed on'}));
+    }else panel.appendChild(h('div',{'class':'waiting',text:(realDie()?'Waiting for '+actorName()+' to pick a pile':'Waiting for '+actorName()+' to roll')}));
   }else if(G.phase==='result'&&G.result){
     var r=G.result;
     var line=r.right?(digital?('Team '+r.team+' moves '+r.steps+(r.steps===1?' space':' spaces')):(r.whoAmI?('Move '+r.steps+(r.steps===1?' space':' spaces')+' on the board'):'Point for Team '+r.team)):'No move this time';
@@ -497,10 +530,18 @@ function renderHome(stage,panel){
   var inp=h('input',{id:'joincode',placeholder:'ABCD',maxlength:4,autocomplete:'off',autocapitalize:'characters',spellcheck:'false','aria-label':'Room code',value:/^[A-Z]{4}$/.test(hashCode)?hashCode:'','class':'codein'});
   var join=h('form',{'class':'joinrow',on:{submit:function(e){e.preventDefault();var v=inp.value.trim().toUpperCase();if(!/^[A-Z]{4}$/.test(v)){toast('Room codes are 4 letters');return}G=newGame();save('rtl.game',G);ensureMe(function(){startClient(v)})}}},[inp,h('button',{type:'submit','class':'btn go',text:'Join'})]);
   box.appendChild(h('label',null,['Join a game',join]));
+  box.appendChild(h('button',{type:'button','class':'btn small',text:'Use this screen as the TV',on:{click:function(){var v=inp.value.trim().toUpperCase();if(!/^[A-Z]{4}$/.test(v)){toast('Type the 4-letter code from the host phone first');inp.focus();return}me={team:0,name:'TV',tv:true};save('rtl.me',me);G=newGame();save('rtl.game',G);startClient(v)}}}));
   box.appendChild(h('div',{'class':'or',text:'or'}));
   box.appendChild(h('button',{type:'button','class':'btn',text:'Host a game on this screen',on:{click:function(){if(role!=='host'){G=newGame();code=makeCode();save('rtl.code',code)}ensureMe(startHost,true)}}}));
   box.appendChild(h('button',{type:'button','class':'btn small',text:'Play on this one device',on:{click:function(){role='local';save('rtl.role',role);if(G.phase==='lobby'||!G.v)G=newGame();ensureMe(function(){hostSelf();render()},true)}}}));
   stage.appendChild(box);
+}
+function settingsEl(){
+  var box=h('div',{'class':'settings'});
+  if(G.mode==='digital')box.appendChild(h('div',{'class':'set'},[h('span',{text:'Dice'}),h('div',{'class':'seg'},[['digital','On-screen die'],['real','Real die']].map(function(o){return h('button',{type:'button','aria-pressed':String((G.dice||'digital')===o[0]),text:o[1],on:{click:function(){act('mode',{dice:o[0]})}}})}))]));
+  box.appendChild(h('div',{'class':'set'},[h('span',{text:'Remain Dumb cards'}),h('div',{'class':'seg'},[[true,'Hide on main screen'],[false,'Show to everyone']].map(function(o){return h('button',{type:'button','aria-pressed':String((G.hideDumb!==false)===o[0]),text:o[1],on:{click:function(){act('mode',{hideDumb:o[0]})}}})}))]));
+  box.appendChild(h('p',{'class':'fine',text:G.hideDumb!==false?'Remain Dumb cards show only their card back on the main screen. The person who drew it sees the card on their own phone.':'Remain Dumb cards are shown on every screen.'}));
+  return box;
 }
 function renderWait(stage,panel){
   stage.textContent='';panel.textContent='';
@@ -510,10 +551,10 @@ function renderLobby(stage,panel){
   stage.textContent='';panel.textContent='';
   var host=amHost();
   var box=h('div',{'class':'lobby'});
-  if(role==='host'){
-    var url=location.origin+location.pathname+'#'+code;
+  if(role==='host'||isTV()){
+    var url=SITE+'#'+code;
     var qr=h('div',{'class':'qr','aria-label':'QR code to join'});
-    box.appendChild(h('div',{'class':'codebox'},[h('div',null,[h('span',{'class':'lbl2',text:'Room code'}),h('div',{'class':'roomcode',text:code}),h('span',{'class':'fine',text:location.host+location.pathname.replace(/index\.html$/,'')})]),qr]));
+    box.appendChild(h('div',{'class':'codebox'},[h('div',null,[h('span',{'class':'lbl2',text:'Room code'}),h('div',{'class':'roomcode',text:code}),h('span',{'class':'fine',text:'Join at '+SITE.replace(/^https?:\/\//,'')})]),qr]));
     if(window.qrcode){try{var q=qrcode(0,'M');q.addData(url);q.make();qr.innerHTML=q.createSvgTag({cellSize:4,margin:2,scalable:true})}catch(e){}}
   }
   if(host){
@@ -522,7 +563,8 @@ function renderLobby(stage,panel){
       h('button',{type:'button','class':'mode','aria-pressed':String(G.mode==='digital'),on:{click:function(){act('mode',{mode:'digital',len:G.len})}}},[h('b',{text:'Digital board'}),h('span',{text:'No board needed. Roll here, and right answers move your piece toward the crown.'})])
     ]));
     if(G.mode==='digital')box.appendChild(h('div',{'class':'seg'},['short','standard','long'].map(function(k){return h('button',{type:'button','aria-pressed':String(G.len===k),text:k+' · '+LENS[k],on:{click:function(){act('mode',{mode:G.mode,len:k})}}})})));
-  }else box.appendChild(h('div',{'class':'waiting',text:'You’re in! Waiting for the host to start · '+(G.mode==='digital'?'Digital board':'Board on the table')}));
+    box.appendChild(settingsEl());
+  }else box.appendChild(h('div',{'class':'waiting',text:(isTV()?'Everyone join with the code above. Waiting for the host to start':'You’re in! Waiting for the host to start')+' · '+(G.mode==='digital'?'Digital board':'Board on the table')}));
   var teams=h('div',{'class':'teams'});
   [1,2].forEach(function(t){
     var col=h('div',{'class':'tcol',style:'--tc:'+TEAMC[t]},[h('h3',{text:'Team '+t})]);
@@ -539,7 +581,7 @@ function renderLobby(stage,panel){
 }
 
 /* ---------------- sheets: team pick, menu, cards ---------------- */
-var sheetView=null,afterJoin=null;
+var sheetView=null,afterJoin=null,settingsPaint=null;
 function openSheet(view,build){sheetView=view;var box=$('sheetIn');box.textContent='';build(box);$('sheet').classList.add('open')}
 function closeSheet(){sheetView=null;$('sheet').classList.remove('open')}
 $('sheet').addEventListener('click',function(e){if(e.target===this&&sheetView!=='join')closeSheet()});
@@ -552,7 +594,7 @@ function openJoin(hostScreen){
     var tp=h('div',{'class':'teampick'},[1,2].map(function(t){return h('button',{type:'button','class':'tp','aria-pressed':String(pick===t),style:'--tc:'+TEAMC[t],on:{click:function(){pick=t;tp.querySelectorAll('.tp').forEach(function(b,i){b.setAttribute('aria-pressed',String(i+1===t))})}}},[h('b',{text:String(t)}),h('span',{text:'Team '+t})])}));
     box.appendChild(tp);
     box.appendChild(h('label',null,['Your name',nm]));
-    var done=function(team){me={team:team,name:team?(nm.value.trim()||'Player'):''};save('rtl.me',me);closeSheet();var f=afterJoin;afterJoin=null;if(f)f();else{sendMe();render()}};
+    var done=function(team){me={team:team,name:team?(nm.value.trim()||'Player'):''};if(isTV()&&!team)me.tv=true;save('rtl.me',me);closeSheet();var f=afterJoin;afterJoin=null;if(f)f();else{sendMe();render()}};
     box.appendChild(h('button',{type:'button','class':'btn go',text:'Ready',on:{click:function(){if(!pick){toast('Pick Team 1 or Team 2');return}done(pick)}}}));
     if(hostScreen||amHost())box.appendChild(h('button',{type:'button','class':'btn small',text:'This screen is the TV, not a player',on:{click:function(){done(0)}}}));
   });
@@ -566,7 +608,8 @@ function openMenu(){
       m.appendChild(h('button',{type:'button','class':'btn',text:'Back to setup',on:{click:function(){closeSheet();act('lobby')}}}));
       m.appendChild(h('button',{type:'button','class':'btn',text:'Restart this game',on:{click:function(){closeSheet();act('again')}}}));
     }
-    m.appendChild(h('button',{type:'button','class':'btn',text:'All cards',on:{click:openCards}}));
+    if(amHost())m.appendChild(h('button',{type:'button','class':'btn',text:'Game settings',on:{click:function(){openSheet('settings',function(b){b.appendChild(h('div',{'class':'sh'},[h('h2',{text:'Game settings'}),h('button',{type:'button','class':'ghost',text:'Done',on:{click:closeSheet}})]));var holder=h('div');b.appendChild(holder);var paint=function(){holder.textContent='';holder.appendChild(settingsEl())};paint();settingsPaint=paint})}}}));
+    if(!isTV())m.appendChild(h('button',{type:'button','class':'btn',text:'All cards',on:{click:openCards}}));
     m.appendChild(h('button',{type:'button','class':'btn',text:role==='host'?'Close the room':'Leave this game',on:{click:leave}}));
     m.appendChild(h('p',{'class':'fine',text:role==='host'?'This screen is the host. Keep it open: every phone follows it.':role==='client'?'Connected to room '+code+'.':'Playing on this device.'}));
     box.appendChild(m);
@@ -581,8 +624,26 @@ function openCards(){
     idsOf(cardsDeck).sort(function(a,b){return (cards[a].n||0)-(cards[b].n||0)}).forEach(function(id){var c=cards[id];list.appendChild(h('button',{type:'button','class':'crow',style:'--c:'+DK[c.deck].c,on:{click:function(){openForm(id)}}},[h('b',{text:String(c.prompt).replace(/\n+/g,' ')}),h('span',{text:c.answer?'Answer: '+String(c.answer).replace(/\n+/g,' '):(c.note||'No answer on this card')})]))});
     if(!idsOf(cardsDeck).length)list.appendChild(h('p',{'class':'fine',text:'No cards in this deck yet.'}));
     box.appendChild(list);
-    box.appendChild(h('p',{'class':'fine',text:'Cards you add or change here are saved on this device only. The host’s device is the one that deals the cards.'}));
+    box.appendChild(h('p',{'class':'fine',text:EMBED?'These are the cards saved in this app. When this phone hosts, every card it deals comes from this list.':'Cards you add or change here are saved on this device only. The host’s device is the one that deals the cards.'}));
+    box.appendChild(h('div',{'class':'row'},[h('button',{type:'button','class':'btn small',text:'Back up cards',on:{click:backupCards}}),h('button',{type:'button','class':'btn small',text:'Restore a backup',on:{click:restoreCards}})]));
     box.appendChild(h('button',{type:'button','class':'btn go',text:'Add a card',on:{click:function(){openForm(null)}}}));
+  });
+}
+function backupCards(){
+  var txt=JSON.stringify(EMBED?cards:myCards);
+  openSheet('backup',function(box){
+    box.appendChild(h('div',{'class':'sh'},[h('h2',{text:'Back up cards'}),h('button',{type:'button','class':'ghost',text:'Back',on:{click:openCards}})]));
+    var ta=h('textarea',{id:'bk',readonly:true,style:'min-height:180px;font-size:12px'});ta.value=txt;box.appendChild(ta);
+    box.appendChild(h('p',{'class':'fine',text:'Copy this text and keep it somewhere safe, like a note or an email to yourself. Restore a backup puts these cards back.'}));
+    box.appendChild(h('button',{type:'button','class':'btn go',text:'Copy',on:{click:function(){ta.select();var done=function(){toast('Copied')};try{navigator.clipboard.writeText(txt).then(done,function(){document.execCommand('copy');done()})}catch(e){try{document.execCommand('copy');done()}catch(e2){toast('Select the text and copy it')}}}}}));
+  });
+}
+function restoreCards(){
+  openSheet('restore',function(box){
+    box.appendChild(h('div',{'class':'sh'},[h('h2',{text:'Restore cards'}),h('button',{type:'button','class':'ghost',text:'Back',on:{click:openCards}})]));
+    var ta=h('textarea',{id:'rs',placeholder:'Paste a card backup here',style:'min-height:180px;font-size:12px'});box.appendChild(ta);
+    box.appendChild(h('p',{'class':'fine',text:'Cards in the backup are added back. Cards already here stay.'}));
+    box.appendChild(h('button',{type:'button','class':'btn go',text:'Restore',on:{click:function(){var j;try{j=JSON.parse(ta.value)}catch(e){toast('That text isn’t a card backup');return}var n=0;Object.keys(j||{}).forEach(function(k){var c=j[k];if(c&&c.deleted&&!EMBED){myCards[k]=c;n++;return}if(c&&DK[c.deck]&&typeof c.prompt==='string'){saveCard(k,{deck:c.deck,prompt:c.prompt,options:Array.isArray(c.options)?c.options.map(String):[],answer:String(c.answer||''),note:String(c.note||''),n:Number(c.n)||Date.now()});n++}});if(!EMBED){save('rtl.mycards',myCards);mergeCards()}toast(n+' cards restored');openCards()}}}));
   });
 }
 function field(l,el){return h('label',null,[l,el])}
@@ -599,11 +660,11 @@ function openForm(id){
     var form=h('form',{style:'display:flex;flex-direction:column;gap:10px',on:{submit:function(e){e.preventDefault();
       var data={deck:sel.value,prompt:pr.value.trim(),options:opts.map(function(o){return o.value.trim()}).filter(Boolean),answer:an.value.trim(),note:no.value.trim(),n:id?(cards[id].n||Date.now()):Date.now()};
       if(!data.prompt){toast('Write the question or challenge first');return}
-      var key=id||('my-'+rid());myCards[key]=data;save('rtl.mycards',myCards);mergeCards();cardsDeck=data.deck;toast(id?'Card saved':'Card added');openCards();
+      var key=id||('my-'+rid());saveCard(key,data);cardsDeck=data.deck;toast(id?'Card saved':'Card added');openCards();
     }}},[field('Deck',sel),field('Card text',pr),h('label',null,['Multiple choice',h('div',{'class':'two'},opts)]),field('Answer',an),field('Note on the card',no),h('button',{type:'submit','class':'btn go',text:id?'Save card':'Add card'})]);
     if(id){var del=h('button',{type:'button','class':'btn small bad',text:'Delete this card',on:{click:function(){confirmBar.hidden=false;del.hidden=true}}});
       confirmBar.appendChild(h('button',{type:'button','class':'btn small',text:'Keep it',on:{click:function(){confirmBar.hidden=true;del.hidden=false}}}));
-      confirmBar.appendChild(h('button',{type:'button','class':'btn small bad',text:'Yes, delete',on:{click:function(){myCards[id]={deleted:true};save('rtl.mycards',myCards);mergeCards();toast('Card deleted');openCards()}}}));
+      confirmBar.appendChild(h('button',{type:'button','class':'btn small bad',text:'Yes, delete',on:{click:function(){deleteCard(id);toast('Card deleted');openCards()}}}));
       form.appendChild(del);form.appendChild(confirmBar)}
     box.appendChild(form);
   });
