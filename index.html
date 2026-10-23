@@ -231,6 +231,20 @@ body.tv .result{font-size:20px}body.tv .result b{font-size:28px}
 
 body.hubtv.digi .stage{display:none}
 body.hubtv.digi .panel{width:auto;flex:1;justify-content:center}
+
+#wb{position:fixed;inset:0;z-index:5;background:#fff;display:none;flex-direction:column;padding:calc(env(safe-area-inset-top,0px) + 8px) 12px calc(env(safe-area-inset-bottom,0px) + 10px);gap:8px}
+#wb.on{display:flex}
+#wb .wbbar{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#wb .wbbar b{font-family:var(--f-script);font-style:italic;font-weight:600;font-size:clamp(18px,3vw,34px);color:var(--logo)}
+#wb .wbstage{flex:1;min-height:0;container-type:size;display:grid;place-items:center}
+#wb .wbpad{width:min(100cqw,100cqh);aspect-ratio:1;background:#fff;position:relative}
+#wb.me .wbpad{border:2px dashed var(--line);border-radius:10px;touch-action:none}
+#wb canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#wb .wbtools{display:none;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+#wb.me .wbtools{display:flex}
+#wb .pen{width:34px;height:34px;border-radius:50%;border:3px solid #fff;background:var(--c);box-shadow:0 0 0 2px var(--line);padding:0}
+#wb .pen[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink)}
+#wb .pen.size{background:#fff;display:grid;place-items:center}#wb .pen.size i{width:var(--s,7px);height:var(--s,7px);border-radius:50%;background:var(--ink);display:block;max-width:24px;max-height:24px}
 </style>
 </head>
 <body>

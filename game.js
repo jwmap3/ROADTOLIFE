@@ -141,8 +141,10 @@ function handle(from,a){
       if(G.winner){G.phase='won';break}
       var tt=G.turn.team;G.turn.idx[tt]+=1;G.turn.team=tt===1?2:1;G.card=null;G.roll=null;G.result=null;G.phase='turn';break;
     case 'again': if(!isHost)return;G.pos={1:0,2:0};G.score={1:0,2:0};G.turn={team:1,idx:{1:0,2:0}};G.winner=null;G.result=null;G.card=null;G.roll=null;G.anim=null;G.timer=null;G.phase='turn';break;
+    case 'sketch': if(!actorOK||G.phase!=='card'||!isDrawCard(G.card))return;if(!G.sketch){G.sketch={k:rid()};inkReset()}break;
     default: return;
   }
+  if(G.phase!=='card'||(G.sketch&&a.t==='skip')){if(G.sketch){G.sketch=null;inkReset()}}
   commit();
 }
 function playerTeam(id){var p=G.players.find(function(x){return x.id===id});return p?p.team:0}
@@ -184,10 +186,11 @@ function startHost(){
       if(m.type==='hello'&&typeof m.id==='string'){
         var id=m.id.slice(0,40);c._id=id;
         if(conns[id]&&conns[id]!==c)try{conns[id].close()}catch(e){}
-        conns[id]=c;upsertPlayer(id,m.team,m.name);try{c.send({type:'state',g:stateFor()})}catch(e){}
+        conns[id]=c;upsertPlayer(id,m.team,m.name);try{c.send({type:'state',g:stateFor()});if(G.sketch)c.send({type:'inkall',k:G.sketch.k,strokes:ink})}catch(e){}
         render();
       }else if(m.type==='me'&&c._id){upsertPlayer(c._id,m.team,m.name)}
       else if(m.type==='act'&&c._id){handle(c._id,m.a)}
+      else if(m.type==='ink'&&c._id&&m.m&&G.sketch&&canDraw(c._id)){inkApply(m.m);relayInk(m.m,c._id)}
     });
     c.on('close',function(){if(c._id&&conns[c._id]===c){delete conns[c._id];var p=G.players.find(function(x){return x.id===c._id});if(p){p.off=true;commit()}else render()}});
   });
@@ -219,7 +222,7 @@ function dial(){
   if(hostConn&&hostConn.open)return;
   var c=peer.connect(PREFIX+code,{reliable:true});hostConn=c;
   c.on('open',function(){net='open';sendMe();render()});
-  c.on('data',function(m){if(m&&m.type==='state'&&m.g&&typeof m.g==='object')applyState(m.g)});
+  c.on('data',function(m){if(!m)return;if(m.type==='state'&&m.g&&typeof m.g==='object')applyState(m.g);else if(m.type==='ink'&&m.m)inkApply(m.m);else if(m.type==='inkall'&&Array.isArray(m.strokes))inkAll(m.k,m.strokes)});
   c.on('close',function(){if(hostConn===c){net='lost';render();setTimeout(dial,2500)}});
 }
 function sendMe(){if(role==='client'&&hostConn&&hostConn.open){try{hostConn.send({type:'hello',id:myId,team:me?me.team:0,name:me?me.name:'',tv:!!(me&&me.tv)})}catch(e){}}else if(amHost())hostSelf()}
@@ -374,7 +377,8 @@ function cardFace(c,showAnswer){
   if(showAnswer&&c.answer)body.appendChild(h('div',{'class':'ans',text:c.answer}));
   return h('div',{'class':'side face',style:'--c:'+d.c+';--t:'+d.t},[body,h('div',{'class':'label',text:d.name})]);
 }
-function showCardLayer(){
+function showCardLayer(){renderWB();showCardLayer2()}
+function showCardLayer2(){
   var L=$('cardLayer'),c=G.card,spot=$('spot');
   if(!(G.phase==='card'&&c)){L.classList.remove('on');spot.textContent='';$('cctl').textContent='';shownCardK=null;cardEl=null;clearTimeout(flipTimer);return}
   if(c.k!==shownCardK){
@@ -419,6 +423,7 @@ function paintControls(){
   var box=$('cctl');box.textContent='';var c=G.card;if(!c)return;
   if(!iAmActor()){box.appendChild(h('div',{'class':'waiting',style:'color:#fff',text:isWho(c)?'Guess who it is! '+actorName()+' reads the hints.':secret(c)?(c.deck==='dumb'?actorName()+' is acting it out. Watch and guess!':actorName()+' is asking the question'):actorName()+' is reading the card'}));return}
   if(secret(c)&&!iDrew())box.appendChild(h('div',{'class':'row'},[h('button',{type:'button','class':'btn go',text:peekCard?'Hide card':'Show card',on:{click:function(){peekCard=!peekCard;if(!peekCard)peek=false;paintCard();paintControls()}}})]));
+  if(isDrawCard(c))box.appendChild(h('div',{'class':'row'},[h('button',{type:'button','class':'btn go',text:G.sketch?'Back to drawing':'Draw it on the TV',on:{click:function(){if(!G.sketch)act('sketch');wbOpen=true;renderWB()}}})]));
   var tr=h('div',{'class':'timers'},[h('span',{'class':'lbl',text:'Timer'})]);
   if(G.timer&&G.timer.end){tr.appendChild(h('button',{type:'button','class':'btn big',id:'tbig',text:'0:00','aria-label':'Stop the timer',on:{click:function(){act('timer',{dur:0})}}}));tr.appendChild(h('button',{type:'button','class':'btn',text:'Stop',on:{click:function(){act('timer',{dur:0})}}}))}
   else [30,40,60,90].forEach(function(n){tr.appendChild(h('button',{type:'button','class':'btn',text:n<60?n+'s':(n/60|0)+':'+('0'+n%60).slice(-2),on:{click:function(){act('timer',{dur:n})}}}))});
@@ -435,14 +440,86 @@ function paintControls(){
   box.appendChild(h('div',{'class':'row'},[h('button',{type:'button','class':'btn bad',text:'Missed it',on:{click:function(){act('judge',{right:false})}}}),h('button',{type:'button','class':'btn good',text:'Got it right',on:{click:function(){act('judge',{right:true})}}})]));
 }
 
+/* ---------------- whiteboard for drawing cards ----------------
+   The drawer's phone becomes a drawing pad; every stroke is sent through the host to every screen.
+   Points are stored 0..1 across a square pad so phones and TVs of any size draw the same picture. */
+function isDrawCard(c){return !!c&&/\bdraw\b/i.test(c.prompt||'')}
+var ink=[],inkById={},wbOpen=false,wbK=null,wbEl=null,wbCanvas=null,wbCtx=null,wbSize=0,cur=null,pend=[],flushT=null,penColor='#2B1707',penW=.012;
+var PENS=['#2B1707','#C90018','#1565C0','#2E8B3A','#EE6A12','#8E4A08'];
+function inkReset(){ink=[];inkById={};redraw()}
+function inkAll(k,strokes){wbK=k;ink=strokes.filter(function(x){return x&&Array.isArray(x.p)});inkById={};ink.forEach(function(x){inkById[x.id]=x});redraw()}
+function inkApply(m){
+  if(!m||typeof m!=='object')return;
+  if(m.op==='add'&&Array.isArray(m.p)){
+    var st=inkById[m.id];if(!st){st={id:String(m.id),c:String(m.c||'#2B1707'),w:Math.min(.05,Math.max(.002,Number(m.w)||.012)),p:[]};inkById[st.id]=st;ink.push(st)}
+    var from=st.p.length;st.p=st.p.concat(m.p.map(Number).filter(function(v){return isFinite(v)}));drawStroke(st,Math.max(0,from-2));
+  }else if(m.op==='undo'){var i=ink.length-1;while(i>=0&&ink[i].id.indexOf(String(m.by||''))!==0)i--;if(i>=0){delete inkById[ink[i].id];ink.splice(i,1)}redraw()}
+  else if(m.op==='clear'){ink=[];inkById={};redraw()}
+}
+function relayInk(m,except){
+  if(role==='host')Object.keys(conns).forEach(function(id){var c=conns[id];if(id!==except&&c&&c.open){try{c.send({type:'ink',m:m})}catch(e){}}});
+  if(window.AndroidHub&&window.AndroidHub.ink&&amHost()){try{window.AndroidHub.ink(JSON.stringify(m))}catch(e){}}
+}
+function hubInkAll(){if(window.AndroidHub&&window.AndroidHub.ink&&amHost()){try{window.AndroidHub.ink(JSON.stringify({op:'all',k:G.sketch?G.sketch.k:null,strokes:ink}))}catch(e){}}}
+window.hubInk=function(m){if(m&&m.op==='all')inkAll(m.k,m.strokes||[]);else inkApply(m)};
+function canDraw(id){var ap=activePlayer();return ap?ap.id===id:playerTeam(id)===G.turn.team}
+function sendInk(m){inkApply(m);if(amHost())relayInk(m,null);else if(hostConn&&hostConn.open){try{hostConn.send({type:'ink',m:m})}catch(e){}}}
+function drawStroke(st,from){
+  if(!wbCtx||!wbSize)return;var p=st.p,S=wbSize;if(p.length<2)return;
+  wbCtx.strokeStyle=st.c;wbCtx.lineWidth=Math.max(1.5,st.w*S);wbCtx.lineCap='round';wbCtx.lineJoin='round';
+  from=from-(from%2);
+  wbCtx.beginPath();wbCtx.moveTo(p[from]*S,p[from+1]*S);
+  if(p.length===2){wbCtx.lineTo(p[0]*S+.1,p[1]*S+.1)}
+  for(var i=from+2;i<p.length;i+=2)wbCtx.lineTo(p[i]*S,p[i+1]*S);
+  wbCtx.stroke();
+}
+function redraw(){if(!wbCtx)return;wbCtx.clearRect(0,0,wbSize,wbSize);ink.forEach(function(st){drawStroke(st,0)})}
+function flushInk(){flushT=null;if(cur&&pend.length){sendInk({op:'add',id:cur,c:penColor,w:penW,p:pend});pend=pend.slice(-2)}}
+function buildWB(){
+  wbEl=h('div',{id:'wb'});
+  var bar=h('div',{'class':'wbbar'},[h('b',{id:'wbTitle'}),h('span',{'class':'chip timer',id:'wbTimer',hidden:true})]);
+  var pad=h('div',{'class':'wbpad'});wbCanvas=h('canvas',{'aria-label':'Drawing'});pad.appendChild(wbCanvas);
+  var stage=h('div',{'class':'wbstage'},[pad]);
+  var tools=h('div',{'class':'wbtools',id:'wbTools'});
+  PENS.forEach(function(c){tools.appendChild(h('button',{type:'button','class':'pen','aria-label':'Pen color','data-c':c,style:'--c:'+c,on:{click:function(){penColor=c;paintTools()}}}))});
+  tools.appendChild(h('button',{type:'button','class':'pen size',id:'penSize','aria-label':'Pen size',on:{click:function(){penW=penW<.01?.012:penW<.02?.026:.006;paintTools()}}},[h('i')]));
+  tools.appendChild(h('button',{type:'button','class':'btn small',text:'Undo',on:{click:function(){sendInk({op:'undo',by:myId})}}}));
+  tools.appendChild(h('button',{type:'button','class':'btn small',text:'Clear',on:{click:function(){sendInk({op:'clear'})}}}));
+  tools.appendChild(h('button',{type:'button','class':'btn small go',text:'Done',on:{click:function(){wbOpen=false;renderWB();paintControls()}}}));
+  wbEl.appendChild(bar);wbEl.appendChild(stage);wbEl.appendChild(tools);
+  document.body.appendChild(wbEl);
+  wbCtx=wbCanvas.getContext('2d');
+  var fit=function(){var r=pad.getBoundingClientRect(),dpr=window.devicePixelRatio||1;if(!r.width)return;wbSize=r.width;wbCanvas.width=Math.round(r.width*dpr);wbCanvas.height=Math.round(r.width*dpr);wbCtx.setTransform(dpr,0,0,dpr,0,0);redraw()};
+  if(window.ResizeObserver)new ResizeObserver(fit).observe(pad);window.addEventListener('resize',fit);wbEl._fit=fit;
+  var pt=function(e){var r=wbCanvas.getBoundingClientRect();return [Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),Math.max(0,Math.min(1,(e.clientY-r.top)/r.height))].map(function(v){return Math.round(v*1000)/1000})};
+  wbCanvas.addEventListener('pointerdown',function(e){if(!wbEl.classList.contains('me'))return;e.preventDefault();wbCanvas.setPointerCapture(e.pointerId);cur=myId+'-'+rid();pend=pt(e);flushInk();if(!flushT)flushT=setTimeout(flushInk,40)});
+  wbCanvas.addEventListener('pointermove',function(e){if(!cur)return;e.preventDefault();var p=pt(e);pend.push(p[0],p[1]);if(!flushT)flushT=setTimeout(flushInk,40)});
+  var up=function(){if(!cur)return;clearTimeout(flushT);flushInk();cur=null;pend=[]};
+  wbCanvas.addEventListener('pointerup',up);wbCanvas.addEventListener('pointercancel',up);
+}
+function paintTools(){if(!wbEl)return;wbEl.querySelectorAll('.pen[data-c]').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-c')===penColor))});var sz=$('penSize');if(sz)sz.style.setProperty('--s',(penW*600)+'px')}
+function renderWB(){
+  var active=G.phase==='card'&&!!G.sketch&&!!G.card&&role!==null;
+  if(active&&G.sketch.k!==wbK){wbK=G.sketch.k;if(!amHost())inkReset()}
+  if(G.phase!=='card'||!G.card||!isDrawCard(G.card))wbOpen=false;
+  var drawer=active&&iAmActor();
+  var show=active&&(!drawer||wbOpen);
+  if(!show){if(wbEl)wbEl.classList.remove('on');return}
+  if(!wbEl)buildWB();
+  wbEl.classList.add('on');wbEl.classList.toggle('me',drawer);
+  $('wbTitle').textContent=drawer?'Draw it! Everyone is watching':actorName()+' is drawing. Guess what it is!';
+  paintTools();if(wbEl._fit)wbEl._fit();
+}
+
 /* ---------------- timer ---------------- */
 var overShown=null;
 function tickTimer(){
   var chip=$('timerChip'),t=G.timer;
-  if(!t||!t.end||G.phase!=='card'){chip.hidden=true;return}
+  if(!t||!t.end||G.phase!=='card'){chip.hidden=true;var wt0=$('wbTimer');if(wt0)wt0.hidden=true;return}
   var left=Math.max(0,Math.ceil((t.end-Date.now())/1000)),txt=(left/60|0)+':'+('0'+left%60).slice(-2);
   chip.hidden=false;chip.textContent=left?txt:'Time!';chip.classList.toggle('low',left>0&&left<=10);chip.classList.toggle('over',!left);
   var big=$('tbig');if(big)big.textContent=left?txt:'Time!';
+  var wt=$('wbTimer');if(wt){wt.hidden=false;wt.textContent=left?txt:'Time!'}
   var f=$('tbarFill');if(f)f.style.transform='scaleX('+Math.max(0,(t.end-Date.now())/(t.dur*1000)).toFixed(3)+')';
   if(!left&&overShown!==t.k){overShown=t.k;toast('Time is up!');try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}
 }
@@ -458,7 +535,8 @@ function confetti(){
   (function f(now){ctx.clearRect(0,0,W,H);var k=(now-t0)/3400;P.forEach(function(p){p.vy+=H*.0006;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.globalAlpha=Math.max(0,1-k);ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);ctx.restore()});if(k<1)requestAnimationFrame(f);else ctx.clearRect(0,0,W,H)})(t0);
 }
 var wonShown=null,hubOn=false;
-window.hubTv=function(on){hubOn=!!on;document.body.classList.toggle('hubtv',hubOn);if(hubOn)hubPush();render()};
+window.hubTv=function(on){hubOn=!!on;document.body.classList.toggle('hubtv',hubOn);if(hubOn){hubPush();hubInkAll()}render()};
+window.hubInkAll=function(){hubInkAll()};
 function celebrate(){if(wonShown===G.e)return;wonShown=G.e;confetti();toast('Team '+G.winner+' wins!')}
 
 /* ---------------- screens ---------------- */

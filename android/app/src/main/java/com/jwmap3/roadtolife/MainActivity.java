@@ -117,6 +117,12 @@ public class MainActivity extends Activity {
             lastState = json;
             runOnUiThread(() -> { if (tv != null) tv.push(json); });
         }
+
+        /** Whiteboard strokes from the drawing cards, passed straight to the TV. */
+        @JavascriptInterface
+        public void ink(String json) {
+            runOnUiThread(() -> { if (tv != null) tv.ink(json); });
+        }
     }
 
     /** The second screen shown on the TV. */
@@ -130,10 +136,17 @@ public class MainActivity extends Activity {
             tvWeb = new WebView(getContext());
             setUp(tvWeb);
             tvWeb.setWebViewClient(new WebViewClient() {
-                @Override public void onPageFinished(WebView v, String url) { push(lastState); }
+                @Override public void onPageFinished(WebView v, String url) {
+                    push(lastState);
+                    web.evaluateJavascript("window.hubInkAll&&window.hubInkAll()", null);
+                }
             });
             tvWeb.loadUrl("file:///android_asset/www/tv.html");
             setContentView(tvWeb);
+        }
+
+        void ink(String json) {
+            if (tvWeb != null) tvWeb.evaluateJavascript("window.hubInk&&window.hubInk(" + json + ")", null);
         }
 
         void push(String json) {
