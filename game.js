@@ -69,7 +69,9 @@ function iAmActor(){
   if(amHost())return true;                       // host acts for players without a phone
   return !ap&&me&&me.team===G.turn.team;
 }
-function iDrew(){var ap=activePlayer();return role!=='local'&&!!ap&&ap.id===myId}
+// Is this device the drawer's own private phone? A screen everyone can see never counts:
+// the host screen only counts when the Android app is sending a separate picture to the TV.
+function iDrew(){var ap=activePlayer();if(!ap||ap.id!==myId)return false;if(role==='client')return !isTV();if(role==='host')return hubOn;return false}
 function actorName(){var ap=activePlayer();return ap?ap.name:('Team '+G.turn.team)}
 
 /* ---------------- cards ---------------- */
