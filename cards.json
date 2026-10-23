@@ -1,0 +1,964 @@
+{
+ "dumb-01": {
+  "deck": "dumb",
+  "prompt": "Who am I?\n\n1. I am not an Israelite, but my faith made me one of them...\n\n2. My name means friendship\n\n3. From famine to favor, I became mother of kings",
+  "options": [],
+  "answer": "Ruth",
+  "note": "",
+  "n": 55
+ },
+ "dumb-02": {
+  "deck": "dumb",
+  "prompt": "Who am I?\n\n1. I love paper\n\n2. I was the greatest leader of my time\n\n3. I live in Scranton",
+  "options": [],
+  "answer": "Michael Scott",
+  "note": "",
+  "n": 56
+ },
+ "dumb-03": {
+  "deck": "dumb",
+  "prompt": "Who am I?\n\n1. I had many talents\n\n2. I am compared to Jesus\n\n3. I loved seeing profits",
+  "options": [],
+  "answer": "The Master in the Parable of the Talents",
+  "note": "",
+  "n": 57
+ },
+ "dumb-04": {
+  "deck": "dumb",
+  "prompt": "Who am I?\n\n1. I had a speech impediment, but was still used by God.\n\n2. Jehovah used me to help lead his people.\n\n3. In 1999 I became a member of the Governing Body.",
+  "options": [],
+  "answer": "Brother Lett",
+  "note": "",
+  "n": 58
+ },
+ "dumb-05": {
+  "deck": "dumb",
+  "prompt": "Draw the following...\n\nDragon kicked out of heaven",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 59
+ },
+ "dumb-06": {
+  "deck": "dumb",
+  "prompt": "Draw the following...\n\nJehovah's Chariot",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 60
+ },
+ "dumb-07": {
+  "deck": "dumb",
+  "prompt": "Who am I?\n\n1. I finished many books before finishing a sentence\n\n2. I went from prestige to chains\n\n3. A miracle disabled me",
+  "options": [],
+  "answer": "Paul",
+  "note": "",
+  "n": 61
+ },
+ "dumb-08": {
+  "deck": "dumb",
+  "prompt": "Draw Manna...",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 62
+ },
+ "dumb-09": {
+  "deck": "dumb",
+  "prompt": "Act out the following...\n\nLot's wife",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 63
+ },
+ "dumb-10": {
+  "deck": "dumb",
+  "prompt": "Have 3 people act out the garden of Eden...",
+  "options": [],
+  "answer": "",
+  "note": "40 seconds to get it right",
+  "n": 64
+ },
+ "dumb-11": {
+  "deck": "dumb",
+  "prompt": "Zechariah (Elizabeth's husband) losing his voice. 2 people.",
+  "options": [],
+  "answer": "",
+  "note": "40 seconds to guess",
+  "n": 65
+ },
+ "dumb-12": {
+  "deck": "dumb",
+  "prompt": "Jonah and the fish... 1 person",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 66
+ },
+ "dumb-13": {
+  "deck": "dumb",
+  "prompt": "Whoever rolled the dice must act out Jesus in some way...",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 67
+ },
+ "dumb-14": {
+  "deck": "dumb",
+  "prompt": "3 people act out life in the new world...",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 68
+ },
+ "dumb-15": {
+  "deck": "dumb",
+  "prompt": "David slaying Goliath... 2 people",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 69
+ },
+ "dumb-16": {
+  "deck": "dumb",
+  "prompt": "Have 3 people act out Moses, Aaron, and Pharaoh",
+  "options": [],
+  "answer": "",
+  "note": "What category does this fit into most?",
+  "n": 70
+ },
+ "dumb-17": {
+  "deck": "dumb",
+  "prompt": "1 person acts out John the Baptist...",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 71
+ },
+ "dumb-18": {
+  "deck": "dumb",
+  "prompt": "Draw Jesus' temptation in the wilderness...",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 72
+ },
+ "dumb-19": {
+  "deck": "dumb",
+  "prompt": "Draw the following...\n\nThe ten-horned wild beast",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 106
+ },
+ "dumb-20": {
+  "deck": "dumb",
+  "prompt": "Who am I?\n\n1. I spoke only once.\n\n2. I was unclean all my days.\n\n3. I saw what my master could not.",
+  "options": [],
+  "answer": "Balaam's donkey",
+  "note": "",
+  "n": 305
+ },
+ "last-01": {
+  "deck": "last",
+  "prompt": "Your team must name every piece of the spiritual armor at Ephesians 6, and what each one stands for.",
+  "options": [],
+  "answer": "1. Belt = truth\n2. Breastplate = righteousness\n3. Footwear = readiness to declare the good news of peace\n4. Large shield = faith\n5. Helmet = hope of salvation\n6. Sword of the spirit = God's word",
+  "note": "Don't show your team. You hold the answers and check them off before time runs out.",
+  "n": 201
+ },
+ "last-02": {
+  "deck": "last",
+  "prompt": "Your team must name every aspect of the fruitage of the spirit.",
+  "options": [],
+  "answer": "1. Love\n2. Joy\n3. Peace\n4. Patience\n5. Kindness\n6. Goodness\n7. Faith\n8. Mildness\n9. Self-control\n\nGalatians 5:22, 23",
+  "note": "Don't show your team. You hold the answers.",
+  "n": 202
+ },
+ "last-03": {
+  "deck": "last",
+  "prompt": "Your team must describe the image of Daniel chapter 2 from head to feet, and name the world power each part stands for.",
+  "options": [],
+  "answer": "1. Head of gold = Babylon\n2. Chest and arms of silver = Medo-Persia\n3. Belly and thighs of copper = Greece\n4. Legs of iron = Rome\n5. Feet of iron and clay = Anglo-America",
+  "note": "Don't show your team. You hold the answers.",
+  "n": 203
+ },
+ "last-04": {
+  "deck": "last",
+  "prompt": "Your team must name the four beasts of Daniel chapter 7 in order, and the world power each one stands for.",
+  "options": [],
+  "answer": "1. Lion with wings = Babylon\n2. Bear = Medo-Persia\n3. Leopard with four wings and four heads = Greece\n4. Fearsome beast with ten horns = Rome",
+  "note": "Don't show your team. You hold the answers.",
+  "n": 204
+ },
+ "last-05": {
+  "deck": "last",
+  "prompt": "Put Jesus' three temptations in the order Matthew records them.",
+  "options": [],
+  "answer": "1. Turn these stones into bread\n2. Throw yourself off the battlement of the temple\n3. All the kingdoms of the world for one act of worship\n\nMatthew 4:1-11",
+  "note": "",
+  "n": 205
+ },
+ "last-06": {
+  "deck": "last",
+  "prompt": "Name all 9 resurrections recorded in the Bible.\n\nStump: name the 2 resurrections besides these.",
+  "options": [],
+  "answer": "1. The widow of Zarephath's son (Elijah)\n2. The Shunammite woman's son (Elisha)\n3. The man who touched Elisha's bones\n4. The widow of Nain's son\n5. Jairus' daughter\n6. Lazarus\n7. Jesus\n8. Dorcas (Peter)\n9. Eutychus (Paul)\n\nStump:\n10. The earthly resurrection in the new world\n11. The heavenly resurrection",
+  "note": "",
+  "n": 206
+ },
+ "last-07": {
+  "deck": "last",
+  "prompt": "Name all 12 tribes of Israel.",
+  "options": [],
+  "answer": "Reuben, Simeon, Levi, Judah, Dan, Naphtali, Gad, Asher, Issachar, Zebulun, Joseph, Benjamin\n\n(Joseph's tribe was counted as two, Ephraim and Manasseh.)",
+  "note": "",
+  "n": 207
+ },
+ "last-08": {
+  "deck": "last",
+  "prompt": "Rank these from longest life to shortest:\n\nMoses, Adam, Abraham, Methuselah, Joseph, Noah",
+  "options": [],
+  "answer": "1. Methuselah (969)\n2. Noah (950)\n3. Adam (930)\n4. Abraham (175)\n5. Moses (120)\n6. Joseph (110)",
+  "note": "",
+  "n": 208
+ },
+ "last-09": {
+  "deck": "last",
+  "prompt": "Rank these Bible coins and weights from least to most valuable:\n\nTalent, lepton, denarius, mina, assarion, quadrans",
+  "options": [],
+  "answer": "1. Lepton\n2. Quadrans\n3. Assarion\n4. Denarius\n5. Mina\n6. Talent",
+  "note": "",
+  "n": 209
+ },
+ "last-10": {
+  "deck": "last",
+  "prompt": "On a whiteboard, write the proper order of the next prophecies to take place, ending with Armageddon.",
+  "options": [],
+  "answer": "1. World powers give authority to the UN, the ten-horned wild beast\n(Great tribulation begins)\n2. The beast attacks and kills Babylon the Great\n3. Cry of peace and security (could happen before or after 2)\n4. Sudden destruction of the political power known as the beast, or UN\n5. In one last desperate act, a different coalition of nations known as Gog of Magog attacks God's people\n6. Anointed are called to heaven during the attack of Gog of Magog\n7. Final battle of Armageddon: the wicked are destroyed, Satan and the demons abyssed",
+  "note": "",
+  "n": 210
+ },
+ "last-11": {
+  "deck": "last",
+  "prompt": "Have someone on your team recite every book of the Bible in the proper order.",
+  "options": [],
+  "answer": "Genesis, Exodus, Leviticus, Numbers, Deuteronomy, Joshua, Judges, Ruth, 1 Samuel, 2 Samuel, 1 Kings, 2 Kings, 1 Chronicles, 2 Chronicles, Ezra, Nehemiah, Esther, Job, Psalms, Proverbs, Ecclesiastes, Song of Solomon, Isaiah, Jeremiah, Lamentations, Ezekiel, Daniel, Hosea, Joel, Amos, Obadiah, Jonah, Micah, Nahum, Habakkuk, Zephaniah, Haggai, Zechariah, Malachi\n\nMatthew, Mark, Luke, John, Acts, Romans, 1 Corinthians, 2 Corinthians, Galatians, Ephesians, Philippians, Colossians, 1 Thessalonians, 2 Thessalonians, 1 Timothy, 2 Timothy, Titus, Philemon, Hebrews, James, 1 Peter, 2 Peter, 1 John, 2 John, 3 John, Jude, Revelation",
+  "note": "",
+  "n": 211
+ },
+ "last-12": {
+  "deck": "last",
+  "prompt": "On a whiteboard, write down what each creative day was in the right order.",
+  "options": [],
+  "answer": "Day 1: Light; day and night divided\nDay 2: The expanse\nDay 3: Dry land and vegetation\nDay 4: Sun, moon and stars become visible from the earth\nDay 5: Sea creatures and flying creatures\nDay 6: Land animals and humans",
+  "note": "",
+  "n": 212
+ },
+ "last-13": {
+  "deck": "last",
+  "prompt": "Put the ten plagues in order.",
+  "options": [],
+  "answer": "1. Water into blood\n2. Frogs\n3. Gnats\n4. Gadflies\n5. Pestilence on the livestock\n6. Boils\n7. Hail\n8. Locusts\n9. Darkness\n10. Death of the firstborn",
+  "note": "",
+  "n": 213
+ },
+ "last-14": {
+  "deck": "last",
+  "prompt": "Name the seven world powers of Bible prophecy in order.",
+  "options": [],
+  "answer": "1. Egypt\n2. Assyria\n3. Babylon\n4. Medo-Persia\n5. Greece\n6. Rome\n7. Anglo-America",
+  "note": "",
+  "n": 214
+ },
+ "last-15": {
+  "deck": "last",
+  "prompt": "Write the Ten Commandments in order.",
+  "options": [],
+  "answer": "1. No other gods\n2. No carved image\n3. Do not take up Jehovah's name in a worthless way\n4. Keep the Sabbath\n5. Honor your father and your mother\n6. Do not murder\n7. Do not commit adultery\n8. Do not steal\n9. Do not bear false witness\n10. Do not desire what belongs to your fellow man",
+  "note": "",
+  "n": 215
+ },
+ "last-18": {
+  "deck": "last",
+  "prompt": "Put these events of Jesus' life in order:\n\nTransfiguration, baptism, flight to Egypt, ascension, first miracle at Cana, birth in Bethlehem, the Lord's Evening Meal, at the temple at age 12, resurrection, temptation in the wilderness, entry into Jerusalem, death",
+  "options": [],
+  "answer": "1. Birth in Bethlehem\n2. Flight to Egypt\n3. At the temple at age 12\n4. Baptism\n5. Temptation in the wilderness\n6. First miracle at Cana\n7. Transfiguration\n8. Entry into Jerusalem\n9. The Lord's Evening Meal\n10. Death\n11. Resurrection\n12. Ascension",
+  "note": "",
+  "n": 218
+ },
+ "last-20": {
+  "deck": "last",
+  "prompt": "Put the presidents of the Watch Tower Society in order.",
+  "options": [],
+  "answer": "1. Russell\n2. Rutherford\n3. Knorr\n4. Franz\n5. Henschel\n6. Adams",
+  "note": "",
+  "n": 220
+ },
+ "last-21": {
+  "deck": "last",
+  "prompt": "Put the seven requests of the model prayer in order.",
+  "options": [],
+  "answer": "1. Let your name be sanctified\n2. Let your Kingdom come\n3. Let your will take place\n4. Give us our bread for this day\n5. Forgive us our debts\n6. Do not bring us into temptation\n7. Deliver us from the wicked one\n\nMatthew 6:9-13",
+  "note": "",
+  "n": 221
+ },
+ "last-22": {
+  "deck": "last",
+  "prompt": "Name the seven congregations of Revelation in order.",
+  "options": [],
+  "answer": "Ephesus, Smyrna, Pergamum, Thyatira, Sardis, Philadelphia, Laodicea",
+  "note": "",
+  "n": 222
+ },
+ "last-23": {
+  "deck": "last",
+  "prompt": "Put Jacob's twelve sons in birth order.",
+  "options": [],
+  "answer": "Reuben, Simeon, Levi, Judah, Dan, Naphtali, Gad, Asher, Issachar, Zebulun, Joseph, Benjamin",
+  "note": "",
+  "n": 223
+ },
+ "last-26": {
+  "deck": "last",
+  "prompt": "Put the four horsemen of Revelation in order and say what each pictures.",
+  "options": [],
+  "answer": "1. White horse = Jesus riding out to conquer\n2. Fiery-colored horse = war\n3. Black horse = famine\n4. Pale horse = Death, with the Grave following",
+  "note": "",
+  "n": 226
+ },
+ "last-28": {
+  "deck": "last",
+  "prompt": "Put the events after Armageddon in order.",
+  "options": [],
+  "answer": "1. Satan is abyssed\n2. The Thousand Year Reign begins: the resurrection, and the earth made a paradise\n3. Satan is released at the end of the thousand years\n4. The final test\n5. Satan and the rebels are destroyed\n6. Jesus hands the Kingdom back to his Father",
+  "note": "",
+  "n": 228
+ },
+ "last-29": {
+  "deck": "last",
+  "prompt": "Name the 3 cities where we had our headquarters.",
+  "options": [],
+  "answer": "1. Allegheny (Pittsburgh)\n2. Brooklyn, from 1909\n3. Warwick",
+  "note": "",
+  "n": 306
+ },
+ "lot-01": {
+  "deck": "lot",
+  "prompt": "Which Apostle was Peter's brother?",
+  "options": [
+   "Matthew",
+   "Philip",
+   "James",
+   "Andrew"
+  ],
+  "answer": "D. Andrew",
+  "note": "",
+  "n": 1
+ },
+ "lot-02": {
+  "deck": "lot",
+  "prompt": "Famously termed by Brother Rutherford in 1935 during a dedication talk, where was the first official Kingdom Hall?",
+  "options": [
+   "Pittsburgh, PA",
+   "Honolulu, Hawaii",
+   "NYC, NY",
+   "Columbus, OH"
+  ],
+  "answer": "B. Honolulu, Hawaii",
+  "note": "",
+  "n": 2
+ },
+ "lot-03": {
+  "deck": "lot",
+  "prompt": "How many Bible writers were there?",
+  "options": [
+   "18",
+   "31",
+   "55",
+   "40"
+  ],
+  "answer": "D. 40",
+  "note": "",
+  "n": 3
+ },
+ "lot-04": {
+  "deck": "lot",
+  "prompt": "Which Apostle was also named Nathanael?",
+  "options": [
+   "Judas",
+   "Thomas",
+   "Bartholomew",
+   "Thaddaeus"
+  ],
+  "answer": "C. Bartholomew",
+  "note": "",
+  "n": 4
+ },
+ "lot-05": {
+  "deck": "lot",
+  "prompt": "Other than the number 7, which other number symbolizes perfection?",
+  "options": [
+   "10",
+   "12",
+   "3",
+   "5"
+  ],
+  "answer": "A. 10",
+  "note": "",
+  "n": 5
+ },
+ "lot-06": {
+  "deck": "lot",
+  "prompt": "Which president of the United States was raised around the truth?",
+  "options": [
+   "Donald Trump",
+   "Roosevelt",
+   "Eisenhower",
+   "George W. Bush"
+  ],
+  "answer": "C. Eisenhower\n\nThe Eisenhower brothers would like to find a graceful way to announce that their mother was not, at heart, a Jehovah's Witness... How could that be true, when she wrote Boeckel in 1944 that she was “a witness of and for the Great Jehovah of Hosts (I have been such for the past 49 years)”?",
+  "note": "",
+  "n": 6
+ },
+ "lot-07": {
+  "deck": "lot",
+  "prompt": "What year were we given the title Jehovah's Witnesses?",
+  "options": [
+   "1931",
+   "1923",
+   "1948",
+   "1919"
+  ],
+  "answer": "A. 1931",
+  "note": "",
+  "n": 7
+ },
+ "lot-08": {
+  "deck": "lot",
+  "prompt": "True or False.\n\nWatchtower Library predates Google",
+  "options": [],
+  "answer": "True! Watchtower Library CD-ROM was first released in 1993, Google being founded in 1998.",
+  "note": "",
+  "n": 8
+ },
+ "lot-09": {
+  "deck": "lot",
+  "prompt": "How many shekels was Joseph sold as a slave for?",
+  "options": [
+   "200",
+   "20",
+   "5",
+   "Free"
+  ],
+  "answer": "B. 20, the value of about $176 today. Exodus 21:32 said the going rate of a slave was 30 shekels, Joseph was sold at a discount by his brothers.",
+  "note": "",
+  "n": 9
+ },
+ "lot-10": {
+  "deck": "lot",
+  "prompt": "Share a point that has recently strengthened your faith.\n\nAlso... What is the first city mentioned in the Bible?",
+  "options": [
+   "Babylon",
+   "Nineveh",
+   "Enoch",
+   "Sodom"
+  ],
+  "answer": "C. Enoch",
+  "note": "",
+  "n": 10
+ },
+ "lot-11": {
+  "deck": "lot",
+  "prompt": "What was the first of the ten plagues in Egypt?",
+  "options": [
+   "Frogs",
+   "Water into blood",
+   "Darkness",
+   "Locust infestation"
+  ],
+  "answer": "B. Water into blood",
+  "note": "",
+  "n": 11
+ },
+ "lot-12": {
+  "deck": "lot",
+  "prompt": "Who was made king of Judah at seven years of age after having been hidden for six years?",
+  "options": [
+   "Jehoshaphat",
+   "Hosea",
+   "Joash",
+   "Ahaz"
+  ],
+  "answer": "C. Joash",
+  "note": "",
+  "n": 12
+ },
+ "lot-13": {
+  "deck": "lot",
+  "prompt": "Who is the longest serving member of the Governing Body today?",
+  "options": [
+   "Lett",
+   "Herd",
+   "Lösch",
+   "Splane"
+  ],
+  "answer": "C. Lösch, 1994 (Herd being the oldest, 88)",
+  "note": "",
+  "n": 13
+ },
+ "lot-14": {
+  "deck": "lot",
+  "prompt": "How tall was Goliath?",
+  "options": [
+   "6 cubits and a span",
+   "8 feet 8 inches",
+   "380 cm",
+   "5'9"
+  ],
+  "answer": "A. 6 cubits and a span, 9ft 9in",
+  "note": "",
+  "n": 14
+ },
+ "lot-15": {
+  "deck": "lot",
+  "prompt": "Which of the apostles was first killed for his faith?",
+  "options": [
+   "James",
+   "Thomas",
+   "Andrew",
+   "Paul"
+  ],
+  "answer": "A. James",
+  "note": "",
+  "n": 15
+ },
+ "lot-16": {
+  "deck": "lot",
+  "prompt": "What is Brother Sanderson's favorite series?",
+  "options": [
+   "Spiderman",
+   "Star Trek",
+   "Star Wars",
+   "The Office"
+  ],
+  "answer": "Star Wars, we talked about it at the Bethel grocery store",
+  "note": "",
+  "n": 16
+ },
+ "lot-17": {
+  "deck": "lot",
+  "prompt": "How long were the Israelites in Egypt?",
+  "options": [
+   "215 years",
+   "820 years",
+   "100 years",
+   "11 months"
+  ],
+  "answer": "A. 215 years",
+  "note": "",
+  "n": 17
+ },
+ "lot-18": {
+  "deck": "lot",
+  "prompt": "Who was punished with death for touching the ark of God?",
+  "options": [
+   "Korah",
+   "Naaman",
+   "Uzza",
+   "Obed"
+  ],
+  "answer": "C. Uzza",
+  "note": "",
+  "n": 18
+ },
+ "lot-19": {
+  "deck": "lot",
+  "prompt": "Which event comes first in the great tribulation?",
+  "options": [
+   "Gog of Magog attacks God's people",
+   "The beast attacks Babylon the Great",
+   "The anointed are called to heaven",
+   "Armageddon"
+  ],
+  "answer": "B. The beast attacks and kills Babylon the Great",
+  "note": "",
+  "n": 104
+ },
+ "lot-20": {
+  "deck": "lot",
+  "prompt": "When are the anointed called to heaven?",
+  "options": [
+   "Before the cry of peace and security",
+   "When Babylon the Great is destroyed",
+   "During the attack of Gog of Magog",
+   "After Armageddon"
+  ],
+  "answer": "C. During the attack of Gog of Magog",
+  "note": "",
+  "n": 105
+ },
+ "lot-21": {
+  "deck": "lot",
+  "prompt": "How many stones did David pick up to face Goliath?",
+  "options": [
+   "1",
+   "3",
+   "5",
+   "7"
+  ],
+  "answer": "C. 5 (1 Samuel 17:40)",
+  "note": "",
+  "n": 301
+ },
+ "lot-22": {
+  "deck": "lot",
+  "prompt": "How many years did Jacob serve Laban in all?",
+  "options": [
+   "7",
+   "14",
+   "20",
+   "40"
+  ],
+  "answer": "C. 20 (Genesis 31:41)",
+  "note": "",
+  "n": 302
+ },
+ "so-01": {
+  "deck": "so",
+  "prompt": "Name the 5 women mentioned in Jesus' genealogy...",
+  "options": [],
+  "answer": "Tamar, Rahab, Ruth, Bathsheba, Mary",
+  "note": "",
+  "n": 37
+ },
+ "so-02": {
+  "deck": "so",
+  "prompt": "Which book of the Bible holds the most messianic prophecies?",
+  "options": [],
+  "answer": "Isaiah, over 40",
+  "note": "",
+  "n": 38
+ },
+ "so-03": {
+  "deck": "so",
+  "prompt": "Explain the illustration of the 10 Virgins meaning...",
+  "options": [],
+  "answer": "Small group of anointed men who would take the lead among Christ's followers during the last days. Jesus warned those men that they must remain faithful. Next, he broadened his focus and gave this parable to admonish all his anointed followers in the last days to “keep on the watch” lest they miss out on their precious reward.",
+  "note": "",
+  "n": 39
+ },
+ "so-04": {
+  "deck": "so",
+  "prompt": "Which of these qualities does Jehovah NOT have? And why..\n\nJealousy..\nModesty..\nZeal..\nOmnipotence..",
+  "options": [],
+  "answer": "Modesty, as used in the Scriptures, suggests a proper awareness of one's own limitations. The Almighty has no limitations except for those he imposes upon himself because of his own righteous standards. (Mark 10:27; Titus 1:2) Furthermore, as the Most High, he is subject to no one. So the concept of modesty simply does not apply to Jehovah.",
+  "note": "",
+  "n": 40
+ },
+ "so-05": {
+  "deck": "so",
+  "prompt": "Jesus sweat blood before his death, which of the following is the name of this stress induced condition?",
+  "options": [
+   "Hematidrosis",
+   "Chromhidrosis",
+   "Night Sweats"
+  ],
+  "answer": "A. Cases of extremely high stress release hormones that can intensely rupture the blood vessels in your skin",
+  "note": "",
+  "n": 41
+ },
+ "so-06": {
+  "deck": "so",
+  "prompt": "Explain who Gog of Magog is...",
+  "options": [],
+  "answer": "Gog of Magog refers to a coalition of earthly nations that will attack pure worshippers during the great tribulation. During the final test at the end of the 1,000 years, those who rebel against Jehovah will manifest the same murderous attitude as ‘Gog of Magog.’",
+  "note": "",
+  "n": 42
+ },
+ "so-07": {
+  "deck": "so",
+  "prompt": "True or false, Jesus partook of the memorial evening meal...",
+  "options": [],
+  "answer": "False, Jesus is the Mediator of that covenant, not a participant. As the Mediator, he evidently did not partake of the emblems. Jesus had no sins. (Heb 7:26) He mediates the new covenant between Jehovah God and those chosen as Christ's associates. (Heb 9:15; see COVENANT.)",
+  "note": "",
+  "n": 43
+ },
+ "so-08": {
+  "deck": "so",
+  "prompt": "Chronologically, which book of the Bible was written last?",
+  "options": [],
+  "answer": "NOT Revelation (96 CE). (98 CE) John, 1 John, 2 John, 3 John.",
+  "note": "",
+  "n": 44
+ },
+ "so-09": {
+  "deck": "so",
+  "prompt": "How many writers contributed to the scriptures?",
+  "options": [],
+  "answer": "40",
+  "note": "",
+  "n": 45
+ },
+ "so-10": {
+  "deck": "so",
+  "prompt": "Which three men's corpses were handled by God...",
+  "options": [],
+  "answer": "Moses (Deut. 34:5-6)\nEnoch (Gen. 5:24)\nJesus (Acts 2:24, 32)",
+  "note": "",
+  "n": 46
+ },
+ "so-11": {
+  "deck": "so",
+  "prompt": "Has Jehovah always been sovereign? If not, when did he become sovereign?",
+  "options": [],
+  "answer": "Sovereignty = Right to rule. Before Jesus, Jehovah ruled over no one.",
+  "note": "",
+  "n": 47
+ },
+ "so-12": {
+  "deck": "so",
+  "prompt": "Who founded the first empire?",
+  "options": [],
+  "answer": "Nimrod apparently remained at Babel and expanded his dominion, founding the first empire.\n\nNot long after the Flood, the Devil apparently used Nimrod, a man notorious for his “opposition to Jehovah,” in an effort to unite all mankind in a form of worship that would again be opposed to Jehovah. (Genesis 10:8, 9; 11:2-4) It would have been one united false religion, unified Devil worship, centered on the city and the tower that his worshipers built.",
+  "note": "",
+  "n": 48
+ },
+ "so-13": {
+  "deck": "so",
+  "prompt": "Who was the first Christian to preach to gentiles?",
+  "options": [],
+  "answer": "Peter...",
+  "note": "",
+  "n": 49
+ },
+ "so-14": {
+  "deck": "so",
+  "prompt": "What decade did modern Christians stop using the cross?",
+  "options": [],
+  "answer": "1920's, gradually discontinued",
+  "note": "",
+  "n": 50
+ },
+ "so-15": {
+  "deck": "so",
+  "prompt": "Which New Testament book was actually written in Hebrew?",
+  "options": [],
+  "answer": "Matthew, only book first written in Hebrew. It 2-204",
+  "note": "",
+  "n": 51
+ },
+ "so-16": {
+  "deck": "so",
+  "prompt": "What is the only domestic animal kind not named in the Bible?",
+  "options": [],
+  "answer": "Cat...",
+  "note": "",
+  "n": 52
+ },
+ "so-17": {
+  "deck": "so",
+  "prompt": "Who is the first recorded man to ever experience flight?",
+  "options": [],
+  "answer": "Racing through earth's atmosphere, the fiery chariot evidently transferred Elijah to another part of the earth, where he continued living for a time. Years later, in fact, Elijah wrote a letter to Jehoram, the king of Judah. —2 Chronicles 21:1, 12-15.",
+  "note": "",
+  "n": 53
+ },
+ "so-18": {
+  "deck": "so",
+  "prompt": "What was Satan's assignment as an angel?",
+  "options": [],
+  "answer": "The Scriptures tell us of one angel, a cherub, that left his assignment, and of the results. It is the angel that was assigned as overseer in the garden of Eden and betrayed his assignment, becoming Satan the Devil. Ez. 28:11-16",
+  "note": "",
+  "n": 54
+ },
+ "so-19": {
+  "deck": "so",
+  "prompt": "Put the events of the great tribulation in order, from the first step through Armageddon...",
+  "options": [],
+  "answer": "1. World powers give authority to the UN, the ten-horned wild beast\n(Great tribulation begins)\n2. The beast attacks and kills Babylon the Great\n3. Cry of peace and security (could happen before or after 2)\n4. Sudden destruction of the political power known as the beast, or UN\n5. Gog of Magog attacks God's people\n6. Anointed are called to heaven during the attack\n7. Armageddon: the wicked are destroyed, Satan and the demons abyssed",
+  "note": "",
+  "n": 101
+ },
+ "so-20": {
+  "deck": "so",
+  "prompt": "True or false, the cry of peace and security must come before the beast attacks Babylon the Great...",
+  "options": [],
+  "answer": "False. The cry of peace and security could happen before or after the beast attacks and kills Babylon the Great.",
+  "note": "",
+  "n": 102
+ },
+ "so-21": {
+  "deck": "so",
+  "prompt": "After the beast is destroyed, who makes one last attack on God's people, and why?",
+  "options": [],
+  "answer": "In one last desperate act a different coalition of nations known as Gog of Magog attacks God's people in hopes to wipe out what's left of true worship.",
+  "note": "",
+  "n": 103
+ },
+ "so-22": {
+  "deck": "so",
+  "prompt": "True or false, Noah took two of every animal into the ark...",
+  "options": [],
+  "answer": "Only partly. The clean animals went in by sevens (Genesis 7:2).",
+  "note": "",
+  "n": 303
+ },
+ "written-01": {
+  "deck": "written",
+  "prompt": "What appendix has recently been added to our New World Translation?",
+  "options": [],
+  "answer": "Appendix C 1-4, discuss it together",
+  "note": "",
+  "n": 19
+ },
+ "written-02": {
+  "deck": "written",
+  "prompt": "Out of these Bible currencies which one was worth the most?",
+  "options": [
+   "Shekel",
+   "Daric",
+   "Denarius",
+   "Lepton"
+  ],
+  "answer": "Denarius = 1 day's wage ($80)\nDaric = $700\nShekel = weight unit, worth $15 today\nLepton = a few dollars today, worth 15 minutes of your time",
+  "note": "",
+  "n": 20
+ },
+ "written-03": {
+  "deck": "written",
+  "prompt": "What is the theme of the Bible?",
+  "options": [],
+  "answer": "How Jehovah will clear his name, restore his rulership by means of his Kingdom. Source: intro Bible video",
+  "note": "",
+  "n": 21
+ },
+ "written-04": {
+  "deck": "written",
+  "prompt": "Quote Psalm 37:29...",
+  "options": [],
+  "answer": "The righteous will possess the earth, And they will live forever on it.",
+  "note": "",
+  "n": 22
+ },
+ "written-05": {
+  "deck": "written",
+  "prompt": "What is the Pentateuch?",
+  "options": [],
+  "answer": "First 5 books of the Bible",
+  "note": "",
+  "n": 23
+ },
+ "written-06": {
+  "deck": "written",
+  "prompt": "Who is Abaddon, referred to as the angel of death, or abyss?",
+  "options": [],
+  "answer": "Rev. 1:18 reveals",
+  "note": "",
+  "n": 24
+ },
+ "written-07": {
+  "deck": "written",
+  "prompt": "Who is your favorite Bible character and why?",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 25
+ },
+ "written-08": {
+  "deck": "written",
+  "prompt": "What is Tartarus?",
+  "options": [],
+  "answer": "Prisonlike abased condition into which the disobedient angels of Noah's day were cast... abased by God from their heavenly place and privileges... deepest mental darkness... representing everlasting destruction they will experience",
+  "note": "",
+  "n": 26
+ },
+ "written-09": {
+  "deck": "written",
+  "prompt": "When were you convinced you have the truth, and why?",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 27
+ },
+ "written-10": {
+  "deck": "written",
+  "prompt": "Tell us your favorite scripture and why...",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 28
+ },
+ "written-11": {
+  "deck": "written",
+  "prompt": "What scripture would you use to disprove the Trinity and why?",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 29
+ },
+ "written-12": {
+  "deck": "written",
+  "prompt": "What does Matthew 24:14 say...",
+  "options": [],
+  "answer": "",
+  "note": "",
+  "n": 30
+ },
+ "written-13": {
+  "deck": "written",
+  "prompt": "Quote Psalms 83:18",
+  "options": [],
+  "answer": "“May people know that you, whose name is Jehovah, You alone are the Most High over all the earth.”",
+  "note": "",
+  "n": 31
+ },
+ "written-14": {
+  "deck": "written",
+  "prompt": "In Genesis 3:15 the first Bible prophecy is given, explain who the following represent...",
+  "options": [],
+  "answer": "Woman = Heavenly part of Organization\nOffspring of the woman = Jesus Christ and 144,000\nOffspring of the serpent = Demons, and humans who oppose Jehovah\nThe Serpent = Satan the Devil",
+  "note": "",
+  "n": 32
+ },
+ "written-15": {
+  "deck": "written",
+  "prompt": "How many years did it take for the scriptures to be completed?",
+  "options": [],
+  "answer": "1,680 years",
+  "note": "Have both groups guess, whoever gets closest",
+  "n": 33
+ },
+ "written-16": {
+  "deck": "written",
+  "prompt": "How many chapters does Psalms have?",
+  "options": [],
+  "answer": "150",
+  "note": "",
+  "n": 34
+ },
+ "written-17": {
+  "deck": "written",
+  "prompt": "What scripture tells us to “Pray Constantly”?",
+  "options": [],
+  "answer": "1 Thessalonians 5:17",
+  "note": "",
+  "n": 35
+ },
+ "written-18": {
+  "deck": "written",
+  "prompt": "Which Bible book says the word “holy” the most?",
+  "options": [],
+  "answer": "Leviticus",
+  "note": "",
+  "n": 36
+ },
+ "written-19": {
+  "deck": "written",
+  "prompt": "What is the only verse where the word Armageddon appears?",
+  "options": [],
+  "answer": "Revelation 16:16",
+  "note": "",
+  "n": 304
+ }
+}
