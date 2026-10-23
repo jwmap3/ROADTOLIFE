@@ -1,0 +1,32 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'com.jwmap3.roadtolife'
+    compileSdk 34
+    defaultConfig {
+        applicationId 'com.jwmap3.roadtolife'
+        minSdk 24
+        targetSdk 34
+        versionCode Integer.parseInt(System.getenv('BUILD_NUMBER') ?: '1')
+        versionName '1.' + (System.getenv('BUILD_NUMBER') ?: '0')
+    }
+    // A fixed signing key so each new build installs over the last one and keeps the app's saved cards.
+    signingConfigs {
+        release {
+            storeFile file('roadtolife.keystore')
+            storePassword 'roadtolife'
+            keyAlias 'roadtolife'
+            keyPassword 'roadtolife'
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

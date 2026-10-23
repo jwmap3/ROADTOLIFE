@@ -22,6 +22,14 @@ Card rules built in:
 - **Dice**: roll the on-screen die, or roll your real die and tap the number you got.
 - **Remain Dumb cards**: hide them on the main screen (only the person who drew it sees it on their phone), or show them to everyone.
 
+## Android app (phone as the hub)
+
+Download the latest app: https://github.com/jwmap3/ROADTOLIFE/releases/latest/download/RoadToLife.apk
+
+The app runs the game on your phone, and your phone is one of the players. Connect the phone to the TV (Smart View, Roku screen mirroring or Chromecast) and the app shows a separate TV screen with the board, the cards and the room code, while your phone keeps your own player screen. Everyone else joins from their phones on this site.
+
+GitHub builds a new app automatically every time the game changes (see `.github/workflows/android.yml`). Every build is signed with the same key (`android/app/roadtolife.keystore`), so a new version installs over the old one and keeps the cards saved in the app.
+
 ## Showing it on a TV
 
 - **Smart TV with a web browser** (Samsung, LG, Fire TV, Android TV): host from your phone, then open this site on the TV, type the room code and tap **Use this screen as the TV**.

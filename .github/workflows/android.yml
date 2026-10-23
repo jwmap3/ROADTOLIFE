@@ -1,0 +1,54 @@
+name: Build Android app
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Put the game inside the app
+        run: |
+          W=android/app/src/main/assets/www
+          mkdir -p "$W"
+          cp -r index.html game.js cards.json board.jpg art vendor "$W"/
+          printf 'window.RTL_SEED=%s;\n' "$(cat cards.json)" > "$W/seed.js"
+          sed 's#<script src="game.js"></script>#<script src="seed.js"></script><script src="game.js"></script>#' index.html > "$W/app.html"
+          sed 's#<script src="game.js"></script>#<script>window.RTL_DISPLAY=true</script><script src="game.js"></script>#' index.html > "$W/tv.html"
+          grep -q 'seed.js' "$W/app.html" && grep -q 'RTL_DISPLAY' "$W/tv.html"
+
+      - name: Build the app
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+        run: gradle -p android assembleRelease --no-daemon
+
+      - name: Publish the download
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp android/app/build/outputs/apk/release/app-release.apk RoadToLife.apk
+          gh release create "app-${{ github.run_number }}" RoadToLife.apk \
+            --title "Road to Life app (build ${{ github.run_number }})" \
+            --notes "Download RoadToLife.apk on your Android phone and install it. Each new build installs over the last one and keeps your cards." \
+            --latest
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RoadToLife-apk
+          path: RoadToLife.apk

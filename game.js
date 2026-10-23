@@ -20,13 +20,14 @@ var LENS={short:10,standard:16,long:24};
 var PREFIX='roadtolife-jw-';
 var SITE=/^https?:/.test(location.protocol)?location.origin+location.pathname.replace(/index\.html$/,''):'https://jwmap3.github.io/ROADTOLIFE/';
 var EMBED=!!window.RTL_SEED;
+var DISPLAY=!!window.RTL_DISPLAY;   // the TV picture the phone app sends to a cast screen
 var CODECHARS='BCDFGHJKLMNPQRSTVWXZ';
 var $=function(id){return document.getElementById(id)};
 function h(tag,attrs,kids){var e=document.createElement(tag);if(attrs)for(var k in attrs){var v=attrs[k];if(v==null||v===false)continue;if(k==='text')e.textContent=v;else if(k==='on'){for(var ev in v)e.addEventListener(ev,v[ev])}else if(k==='style')e.style.cssText=v;else e.setAttribute(k,v===true?'':v)}(kids||[]).forEach(function(c){if(c)e.appendChild(typeof c==='string'?document.createTextNode(c):c)});return e}
 var SVGNS='http://www.w3.org/2000/svg';
 function s(tag,attrs,kids){var e=document.createElementNS(SVGNS,tag);for(var k in attrs||{})e.setAttribute(k,attrs[k]);(kids||[]).forEach(function(c){if(c)e.appendChild(c)});return e}
 function load(k,f){try{var v=localStorage.getItem(k);return v?JSON.parse(v):f}catch(e){return f}}
-function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function save(k,v){if(window.RTL_DISPLAY)return;try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 function shuffled(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
 function rid(){return Math.random().toString(36).slice(2,10)}
 function makeCode(){var c='';for(var i=0;i<4;i++)c+=CODECHARS[Math.floor(Math.random()*CODECHARS.length)];return c}
@@ -46,8 +47,8 @@ function spaceD(i,n){return LTOT*i/n}
 
 /* ---------------- state ---------------- */
 var myId=load('rtl.cid',null);if(!myId){myId='p'+rid();save('rtl.cid',myId)}
-var me=load('rtl.me',null);                       // {team:0|1|2,name}
-var role=load('rtl.role',null);                   // 'host' | 'client' | 'local' | null
+var me=DISPLAY?{team:0,name:'TV',tv:true}:load('rtl.me',null);   // {team:0|1|2,name}
+var role=DISPLAY?'display':load('rtl.role',null);  // 'host' | 'client' | 'local' | 'display' | null
 var code=load('rtl.code',null);
 var baseCards={},myCards=load('rtl.mycards',{}),cards={};
 var piles=load('rtl.piles',{});
@@ -55,7 +56,7 @@ var G=load('rtl.game',null)||newGame();
 function newGame(){return {e:rid(),v:0,phase:'lobby',mode:'digital',len:'standard',players:[],turn:{team:1,idx:{1:0,2:0}},pos:{1:0,2:0},score:{1:0,2:0},card:null,roll:null,hints:1,timer:null,anim:null,result:null,winner:null,dice:'digital',hideDumb:true}}
 function N(){return LENS[G.len]||16}
 function amHost(){return role==='host'||role==='local'}
-function isTV(){return role==='client'&&!!me&&!!me.tv}
+function isTV(){return (role==='client'||role==='display')&&!!me&&!!me.tv}
 function realDie(){return G.mode!=='digital'||G.dice==='real'}
 function teamPlayers(t){return G.players.filter(function(p){return p.team===t})}
 function activePlayer(){var l=teamPlayers(G.turn.team);return l.length?l[G.turn.idx[G.turn.team]%l.length]:null}
@@ -102,7 +103,7 @@ function drawFrom(deck){
 }
 
 /* ---------------- host: the rules ---------------- */
-function commit(){G.v++;save('rtl.game',G);broadcast();render();if(sheetView==='settings'&&settingsPaint)settingsPaint()}
+function commit(){G.v++;save('rtl.game',G);broadcast();hubPush();render();if(sheetView==='settings'&&settingsPaint)settingsPaint()}
 function handle(from,a){
   if(!a||typeof a!=='object')return;
   var isHost=from===myId;
@@ -162,11 +163,13 @@ function hostSelf(){if(!amHost())return;upsertPlayer(myId,me?me.team:0,me?me.nam
 /* ---------------- network (PeerJS, host-authoritative) ---------------- */
 var peer=null,conns={},hostConn=null,net='',hostTries=0;
 function stateFor(){var g=JSON.parse(JSON.stringify(G));if(g.timer){g.timer.left=g.timer.end-Date.now();delete g.timer.end}return g}
+function hubPush(){if(window.AndroidHub&&amHost()){try{window.AndroidHub.state(JSON.stringify(stateFor()))}catch(e){}}}
 function broadcast(){if(role!=='host')return;var g=stateFor();Object.keys(conns).forEach(function(id){var c=conns[id];if(c&&c.open){try{c.send({type:'state',g:g})}catch(e){}}})}
 setInterval(function(){if(role==='host')broadcast()},4000);
 function startHost(){
   role='host';save('rtl.role',role);
   if(!code){code=makeCode();save('rtl.code',code)}
+  if(G.code!==code){G.code=code;save('rtl.game',G)}
   hostSelf();
   if(!window.Peer){net='offline';render();return}
   if(peer)try{peer.destroy()}catch(e){}
@@ -219,6 +222,7 @@ function dial(){
 }
 function sendMe(){if(role==='client'&&hostConn&&hostConn.open){try{hostConn.send({type:'hello',id:myId,team:me?me.team:0,name:me?me.name:'',tv:!!(me&&me.tv)})}catch(e){}}else if(amHost())hostSelf()}
 function applyState(g){
+  if(g&&g.code)code=g.code;
   if(g.timer&&typeof g.timer.left==='number'){var old=G.timer;g.timer.end=(old&&old.k===g.timer.k&&old.end)?old.end:Date.now()+g.timer.left}
   G=g;save('rtl.game',G);render();
 }
@@ -447,14 +451,16 @@ function confetti(){
   var t0=performance.now();
   (function f(now){ctx.clearRect(0,0,W,H);var k=(now-t0)/3400;P.forEach(function(p){p.vy+=H*.0006;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.globalAlpha=Math.max(0,1-k);ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);ctx.restore()});if(k<1)requestAnimationFrame(f);else ctx.clearRect(0,0,W,H)})(t0);
 }
-var wonShown=null;
+var wonShown=null,hubOn=false;
+window.hubTv=function(on){hubOn=!!on;document.body.classList.toggle('hubtv',hubOn);if(hubOn)hubPush();render()};
 function celebrate(){if(wonShown===G.e)return;wonShown=G.e;confetti();toast('Team '+G.winner+' wins!')}
 
 /* ---------------- screens ---------------- */
 function render(){
   var mc=$('meChip');mc.style.setProperty('--tc',TEAMC[me?me.team:0]);
   mc.lastChild.textContent=!me?'Pick a team':(me.team?('Team '+me.team+(me.name?' · '+me.name:'')):'Host screen');
-  mc.hidden=!role||isTV();$('menuBtn').hidden=!role;
+  mc.hidden=!role||isTV();$('menuBtn').hidden=!role||DISPLAY;
+  document.body.classList.toggle('digi',G.mode==='digital'&&G.phase!=='lobby'&&!!role);
   document.body.classList.toggle('tv',isTV());
   var cc=$('codeChip');cc.hidden=!((role==='host'||isTV())&&code&&G.phase!=='lobby');cc.textContent='Join: '+SITE.replace(/^https?:\/\//,'').replace(/\/$/,'')+' · '+code;
   var stage=$('stage'),panel=$('panel');
@@ -513,6 +519,7 @@ function render(){
     celebrate();
   }
   var ns=netLine();if(ns)panel.appendChild(h('div',{'class':'hintline',text:ns}));
+  if(hubOn)panel.appendChild(h('div',{'class':'hintline',text:'The board is showing on the TV'}));
   showCardLayer();
 }
 function netLine(){
@@ -532,7 +539,7 @@ function renderHome(stage,panel){
   box.appendChild(h('label',null,['Join a game',join]));
   box.appendChild(h('button',{type:'button','class':'btn small',text:'Use this screen as the TV',on:{click:function(){var v=inp.value.trim().toUpperCase();if(!/^[A-Z]{4}$/.test(v)){toast('Type the 4-letter code from the host phone first');inp.focus();return}me={team:0,name:'TV',tv:true};save('rtl.me',me);G=newGame();save('rtl.game',G);startClient(v)}}}));
   box.appendChild(h('div',{'class':'or',text:'or'}));
-  box.appendChild(h('button',{type:'button','class':'btn',text:'Host a game on this screen',on:{click:function(){if(role!=='host'){G=newGame();code=makeCode();save('rtl.code',code)}ensureMe(startHost,true)}}}));
+  box.appendChild(h('button',{type:'button','class':'btn',text:EMBED?'Host a game from this phone':'Host a game on this screen',on:{click:function(){if(role!=='host'){G=newGame();code=makeCode();save('rtl.code',code)}ensureMe(startHost,true)}}}));
   box.appendChild(h('button',{type:'button','class':'btn small',text:'Play on this one device',on:{click:function(){role='local';save('rtl.role',role);if(G.phase==='lobby'||!G.v)G=newGame();ensureMe(function(){hostSelf();render()},true)}}}));
   stage.appendChild(box);
 }
@@ -678,6 +685,7 @@ window.addEventListener('popstate',function(){if(sheetView&&sheetView!=='join')c
 window.addEventListener('hashchange',function(){if(!role)render()});
 
 /* ---------------- start ---------------- */
+if(DISPLAY){window.hubState=function(g){if(g&&typeof g==='object')applyState(g)};render();return}
 loadCards();
 var hc=(location.hash||'').replace('#','').toUpperCase();
 if(/^[A-Z]{4}$/.test(hc)&&!(role==='client'&&code===hc)&&!(role==='host'&&code===hc)){role=null}
@@ -685,4 +693,5 @@ render();
 if(role==='host')startHost();
 else if(role==='client'&&code)startClient(code);
 else if(role==='local'){hostSelf();render()}
+hubPush();
 })();
