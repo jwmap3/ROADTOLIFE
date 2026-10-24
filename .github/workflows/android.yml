@@ -27,7 +27,7 @@ jobs:
         run: |
           W=android/app/src/main/assets/www
           mkdir -p "$W"
-          cp -r index.html game.js cards.json board.jpg art vendor "$W"/
+          cp -r index.html game.js cards.json board.jpg board-wide.jpg art vendor "$W"/
           printf 'window.RTL_SEED=%s;\n' "$(cat cards.json)" > "$W/seed.js"
           sed 's#<script src="game.js"></script>#<script src="seed.js"></script><script src="game.js"></script>#' index.html > "$W/app.html"
           sed 's#<script src="game.js"></script>#<script>window.RTL_DISPLAY=true</script><script src="game.js"></script>#' index.html > "$W/tv.html"

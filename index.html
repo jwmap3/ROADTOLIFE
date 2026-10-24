@@ -245,6 +245,17 @@ body.hubtv.digi .panel{width:auto;flex:1;justify-content:center}
 #wb .pen{width:34px;height:34px;border-radius:50%;border:3px solid #fff;background:var(--c);box-shadow:0 0 0 2px var(--line);padding:0}
 #wb .pen[aria-pressed="true"]{box-shadow:0 0 0 3px var(--ink)}
 #wb .pen.size{background:#fff;display:grid;place-items:center}#wb .pen.size i{width:var(--s,7px);height:var(--s,7px);border-radius:50%;background:var(--ink);display:block;max-width:24px;max-height:24px}
+
+/* TV screen in a digital-board game: the board fills the whole screen, frameless; panels float on top */
+body.tv.digi{background:#FFD5A5}
+body.tv.digi #app{max-width:none;padding:0;height:100%;position:relative}
+body.tv.digi main{position:absolute;inset:0;display:block}
+body.tv.digi .stage{position:absolute;inset:0;display:block;container-type:normal;background:url(board-wide.jpg) center/auto 100% no-repeat}
+body.tv.digi .board{position:absolute;top:0;left:50%;height:100%;width:auto;aspect-ratio:1/1;max-width:none;transform:translateX(-50%);border:0;border-radius:0;box-shadow:none;background:none;overflow:visible}
+body.tv.digi .board img.art{visibility:hidden}
+body.tv.digi header.top{position:absolute;top:0;left:0;right:0;z-index:3;padding:1.6vh 1.8vw}
+body.tv.digi .panel{position:absolute;right:1.8vw;top:50%;transform:translateY(-50%);width:min(21vw,460px);z-index:3}
+body.tv.digi .banner,body.tv.digi .result{box-shadow:0 6px 18px rgba(90,45,5,.25)}
 </style>
 </head>
 <body>
