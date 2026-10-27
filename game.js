@@ -55,7 +55,7 @@ var baseCards={},myCards=load('rtl.mycards',{}),cards={};
 var piles=load('rtl.piles',{});
 var G=load('rtl.game',null)||newGame();
 function newGame(){return {e:rid(),v:0,phase:'lobby',mode:'digital',len:'standard',players:[],turn:{team:1,idx:{1:0,2:0}},pos:{1:0,2:0},score:{1:0,2:0},card:null,roll:null,hints:1,timer:null,anim:null,result:null,winner:null,dice:'digital',hideDumb:true}}
-function N(){return LENS[G.len]||16}
+function N(){var n=Number(G.spaces);return n>=5&&n<=40?Math.round(n):(LENS[G.len]||16)}
 function amHost(){return role==='host'||role==='local'}
 function isTV(){return (role==='client'||role==='display')&&!!me&&!!me.tv}
 function realDie(){return G.mode!=='digital'||G.dice==='real'}
@@ -103,7 +103,7 @@ function drawFrom(deck){
   if(!p.length)p=shuffled(idsOf(deck));
   if(!p.length)return null;
   var id=p.pop();piles[deck]=p;save('rtl.piles',piles);
-  var c=cards[id];return {id:id,deck:c.deck,prompt:c.prompt,options:c.options||[],answer:c.answer||'',note:c.note||'',k:rid()};
+  var c=cards[id];var out={id:id,deck:c.deck,prompt:c.prompt,options:c.options||[],answer:c.answer||'',note:c.note||'',k:rid()};if(typeof c.wb==='boolean')out.wb=c.wb;return out;
 }
 
 /* ---------------- host: the rules ---------------- */
@@ -114,7 +114,7 @@ function handle(from,a){
   var ap=activePlayer();
   var actorOK=isHost||(ap?ap.id===from:playerTeam(from)===G.turn.team);
   switch(a.t){
-    case 'mode': if(!isHost)return;if(a.mode==='board'||a.mode==='digital')G.mode=a.mode;if(LENS[a.len])G.len=a.len;if(a.dice==='digital'||a.dice==='real')G.dice=a.dice;if(typeof a.hideDumb==='boolean')G.hideDumb=a.hideDumb;break;
+    case 'mode': if(!isHost)return;if(a.mode==='board'||a.mode==='digital')G.mode=a.mode;if(LENS[a.len])G.len=a.len;if(a.spaces!=null){var sp=Math.round(Number(a.spaces));if(sp>=5&&sp<=40){G.spaces=sp;[1,2].forEach(function(t){if(G.pos[t]>=sp&&!G.winner)G.pos[t]=sp-1})}}if(a.dice==='digital'||a.dice==='real')G.dice=a.dice;if(typeof a.hideDumb==='boolean')G.hideDumb=a.hideDumb;break;
     case 'start': if(!isHost)return;G.pos={1:0,2:0};G.score={1:0,2:0};G.turn={team:1,idx:{1:0,2:0}};G.winner=null;G.result=null;G.card=null;G.roll=null;G.anim=null;G.timer=null;G.phase='turn';break;
     case 'lobby': if(!isHost)return;G.phase='lobby';G.card=null;G.roll=null;G.timer=null;G.result=null;break;
     case 'addp': if(!isHost)return;G.players.push({id:'m'+rid(),name:String(a.name).slice(0,24),team:a.team===2?2:1,manual:true});break;
@@ -446,7 +446,8 @@ function paintControls(){
 /* ---------------- whiteboard for drawing cards ----------------
    The drawer's phone becomes a drawing pad; every stroke is sent through the host to every screen.
    Points are stored 0..1 across a square pad so phones and TVs of any size draw the same picture. */
-function isDrawCard(c){return !!c&&/\bdraw\b/i.test(c.prompt||'')}
+// a card gets the whiteboard when its editor switch is on; cards never edited fall back to the word "draw"
+function isDrawCard(c){if(!c)return false;if(typeof c.wb==='boolean')return c.wb;return /\bdraw\b/i.test(c.prompt||'')}
 var ink=[],inkById={},wbOpen=false,wbK=null,wbEl=null,wbCanvas=null,wbCtx=null,wbSize=0,cur=null,pend=[],flushT=null,penColor='#2B1707',penW=.012;
 var PENS=['#2B1707','#C90018','#1565C0','#2E8B3A','#EE6A12','#8E4A08'];
 function inkReset(){ink=[];inkById={};redraw()}
@@ -633,6 +634,14 @@ function renderHome(stage,panel){
 }
 function settingsEl(){
   var box=h('div',{'class':'settings'});
+  if(G.mode==='digital'){var n=N(),step=function(d){act('mode',{spaces:Math.max(5,Math.min(40,N()+d))})};
+    box.appendChild(h('div',{'class':'set'},[h('span',{text:'Spaces to the crown'}),h('div',{'class':'stepper'},[
+      h('button',{type:'button','class':'btn small',text:'−5','aria-label':'5 fewer spaces',disabled:n<=5,on:{click:function(){step(-5)}}}),
+      h('button',{type:'button','class':'btn small',text:'−1','aria-label':'1 fewer space',disabled:n<=5,on:{click:function(){step(-1)}}}),
+      h('b',{text:String(n)}),
+      h('button',{type:'button','class':'btn small',text:'+1','aria-label':'1 more space',disabled:n>=40,on:{click:function(){step(1)}}}),
+      h('button',{type:'button','class':'btn small',text:'+5','aria-label':'5 more spaces',disabled:n>=40,on:{click:function(){step(5)}}})]),
+      h('p',{'class':'fine',text:'From 5 (a quick game) to 40 (a long one). Each right answer moves one space.'})]))}
   if(G.mode==='digital')box.appendChild(h('div',{'class':'set'},[h('span',{text:'Dice'}),h('div',{'class':'seg'},[['digital','On-screen die'],['real','Real die']].map(function(o){return h('button',{type:'button','aria-pressed':String((G.dice||'digital')===o[0]),text:o[1],on:{click:function(){act('mode',{dice:o[0]})}}})}))]));
   box.appendChild(h('div',{'class':'set'},[h('span',{text:'Remain Dumb and Is That Really So? cards'}),h('div',{'class':'seg'},[[true,'Only the drawer sees them'],[false,'Show to everyone']].map(function(o){return h('button',{type:'button','aria-pressed':String((G.hideDumb!==false)===o[0]),text:o[1],on:{click:function(){act('mode',{hideDumb:o[0]})}}})}))]));
   box.appendChild(h('p',{'class':'fine',text:G.hideDumb!==false?'The main screen shows only the card art. The person who drew the card sees it, and its answer, on their own phone.':'These cards are shown on every screen.'}));
@@ -657,7 +666,6 @@ function renderLobby(stage,panel){
       h('button',{type:'button','class':'mode','aria-pressed':String(G.mode==='board'),on:{click:function(){act('mode',{mode:'board',len:G.len})}}},[h('b',{text:'Board on the table'}),h('span',{text:'Use your printed board and die. Screens handle turns, cards and the timer.'})]),
       h('button',{type:'button','class':'mode','aria-pressed':String(G.mode==='digital'),on:{click:function(){act('mode',{mode:'digital',len:G.len})}}},[h('b',{text:'Digital board'}),h('span',{text:'No board needed. Roll here, and right answers move your piece toward the crown.'})])
     ]));
-    if(G.mode==='digital')box.appendChild(h('div',{'class':'seg'},['short','standard','long'].map(function(k){return h('button',{type:'button','aria-pressed':String(G.len===k),text:k+' · '+LENS[k],on:{click:function(){act('mode',{mode:G.mode,len:k})}}})})));
     box.appendChild(settingsEl());
   }else box.appendChild(h('div',{'class':'waiting',text:(isTV()?'Everyone join with the code above. Waiting for the host to start':'You’re in! Waiting for the host to start')+' · '+(G.mode==='digital'?'Digital board':'Board on the table')}));
   var teams=h('div',{'class':'teams'});
@@ -738,7 +746,7 @@ function restoreCards(){
     box.appendChild(h('div',{'class':'sh'},[h('h2',{text:'Restore cards'}),h('button',{type:'button','class':'ghost',text:'Back',on:{click:openCards}})]));
     var ta=h('textarea',{id:'rs',placeholder:'Paste a card backup here',style:'min-height:180px;font-size:12px'});box.appendChild(ta);
     box.appendChild(h('p',{'class':'fine',text:'Cards in the backup are added back. Cards already here stay.'}));
-    box.appendChild(h('button',{type:'button','class':'btn go',text:'Restore',on:{click:function(){var j;try{j=JSON.parse(ta.value)}catch(e){toast('That text isn’t a card backup');return}var n=0;Object.keys(j||{}).forEach(function(k){var c=j[k];if(c&&c.deleted&&!EMBED){myCards[k]=c;n++;return}if(c&&DK[c.deck]&&typeof c.prompt==='string'){saveCard(k,{deck:c.deck,prompt:c.prompt,options:Array.isArray(c.options)?c.options.map(String):[],answer:String(c.answer||''),note:String(c.note||''),n:Number(c.n)||Date.now()});n++}});if(!EMBED){save('rtl.mycards',myCards);mergeCards()}toast(n+' cards restored');openCards()}}}));
+    box.appendChild(h('button',{type:'button','class':'btn go',text:'Restore',on:{click:function(){var j;try{j=JSON.parse(ta.value)}catch(e){toast('That text isn’t a card backup');return}var n=0;Object.keys(j||{}).forEach(function(k){var c=j[k];if(c&&c.deleted&&!EMBED){myCards[k]=c;n++;return}if(c&&DK[c.deck]&&typeof c.prompt==='string'){saveCard(k,{deck:c.deck,prompt:c.prompt,options:Array.isArray(c.options)?c.options.map(String):[],answer:String(c.answer||''),note:String(c.note||''),wb:typeof c.wb==='boolean'?c.wb:undefined,n:Number(c.n)||Date.now()});n++}});if(!EMBED){save('rtl.mycards',myCards);mergeCards()}toast(n+' cards restored');openCards()}}}));
   });
 }
 function field(l,el){return h('label',null,[l,el])}
@@ -751,12 +759,13 @@ function openForm(id){
     var opts=[0,1,2,3].map(function(i){var e=h('input',{id:'f-opt'+i,placeholder:'ABCD'[i]+' (optional)','aria-label':'Choice '+'ABCD'[i]});e.value=(c.options||[])[i]||'';return e});
     var an=h('textarea',{id:'f-answer',placeholder:'Only the person whose turn it is can show it'});an.value=c.answer||'';
     var no=h('input',{id:'f-note',placeholder:'Always visible, e.g. 40 seconds to guess'});no.value=c.note||'';
+    var wbBox=h('input',{type:'checkbox',id:'f-wb'});wbBox.checked=isDrawCard(c);
     var confirmBar=h('div',{'class':'row',hidden:true});
     var form=h('form',{style:'display:flex;flex-direction:column;gap:10px',on:{submit:function(e){e.preventDefault();
-      var data={deck:sel.value,prompt:pr.value.trim(),options:opts.map(function(o){return o.value.trim()}).filter(Boolean),answer:an.value.trim(),note:no.value.trim(),n:id?(cards[id].n||Date.now()):Date.now()};
+      var data={deck:sel.value,prompt:pr.value.trim(),options:opts.map(function(o){return o.value.trim()}).filter(Boolean),answer:an.value.trim(),note:no.value.trim(),wb:wbBox.checked,n:id?(cards[id].n||Date.now()):Date.now()};
       if(!data.prompt){toast('Write the question or challenge first');return}
       var key=id||('my-'+rid());saveCard(key,data);cardsDeck=data.deck;toast(id?'Card saved':'Card added');openCards();
-    }}},[field('Deck',sel),field('Card text',pr),h('label',null,['Multiple choice',h('div',{'class':'two'},opts)]),field('Answer',an),field('Note on the card',no),h('button',{type:'submit','class':'btn go',text:id?'Save card':'Add card'})]);
+    }}},[field('Deck',sel),field('Card text',pr),h('label',null,['Multiple choice',h('div',{'class':'two'},opts)]),field('Answer',an),field('Note on the card',no),h('label',{'class':'switch'},[wbBox,h('span',null,[h('b',{text:'Whiteboard'}),h('small',{text:'The person who draws this card can draw on their phone and it shows on the TV'})])]),h('button',{type:'submit','class':'btn go',text:id?'Save card':'Add card'})]);
     if(id){var del=h('button',{type:'button','class':'btn small bad',text:'Delete this card',on:{click:function(){confirmBar.hidden=false;del.hidden=true}}});
       confirmBar.appendChild(h('button',{type:'button','class':'btn small',text:'Keep it',on:{click:function(){confirmBar.hidden=true;del.hidden=false}}}));
       confirmBar.appendChild(h('button',{type:'button','class':'btn small bad',text:'Yes, delete',on:{click:function(){deleteCard(id);toast('Card deleted');openCards()}}}));
