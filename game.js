@@ -174,7 +174,7 @@ function broadcast(){if(role!=='host')return;var g=stateFor();Object.keys(conns)
 setInterval(function(){if(role==='host')broadcast()},4000);
 function startHost(){
   role='host';save('rtl.role',role);
-  if(!code){code=makeCode();save('rtl.code',code)}
+  code=load('rtl.hostcode',null)||code||makeCode();save('rtl.hostcode',code);save('rtl.code',code);
   if(G.code!==code){G.code=code;save('rtl.game',G)}
   hostSelf();
   if(!window.Peer){net='offline';render();return}
@@ -200,7 +200,7 @@ function startHost(){
   peer.on('error',function(err){
     if(err&&err.type==='unavailable-id'){ // the code is still held by this screen's last session; wait, then try again
       hostTries++;try{peer.destroy()}catch(e){}
-      if(hostTries>6){code=makeCode();save('rtl.code',code);hostTries=0;toast('Started a new room code')}
+      if(hostTries>24){code=makeCode();save('rtl.hostcode',code);save('rtl.code',code);hostTries=0;toast('Started a new room code')}
       setTimeout(startHost,2500);return}
     if(err&&(err.type==='network'||err.type==='server-error'||err.type==='socket-error'||err.type==='socket-closed')){net='reconnecting';render();setTimeout(function(){try{if(peer&&!peer.destroyed&&peer.disconnected)peer.reconnect();else if(peer&&peer.destroyed)startHost()}catch(e){}},3000)}
   });
@@ -233,6 +233,7 @@ function applyState(g){
   if(g.timer&&typeof g.timer.left==='number'){var old=G.timer;g.timer.end=(old&&old.k===g.timer.k&&old.end)?old.end:Date.now()+g.timer.left}
   G=g;save('rtl.game',G);render();
 }
+function dropNet(){try{if(peer)peer.destroy()}catch(e){}peer=null;conns={};hostConn=null;net=''}
 function leave(){
   try{if(peer)peer.destroy()}catch(e){}
   peer=null;conns={};hostConn=null;net='';role=null;save('rtl.role',null);
@@ -626,7 +627,7 @@ function renderHome(stage,panel){
   box.appendChild(h('label',null,['Join a game',join]));
   box.appendChild(h('button',{type:'button','class':'btn small',text:'Use this screen as the TV',on:{click:function(){var v=inp.value.trim().toUpperCase();if(!/^[A-Z]{4}$/.test(v)){toast('Type the 4-letter code from the host phone first');inp.focus();return}me={team:0,name:'TV',tv:true};save('rtl.me',me);G=newGame();save('rtl.game',G);startClient(v)}}}));
   box.appendChild(h('div',{'class':'or',text:'or'}));
-  box.appendChild(h('button',{type:'button','class':'btn',text:EMBED?'Host a game from this phone':'Host a game on this screen',on:{click:function(){if(role!=='host'){G=newGame();code=makeCode();save('rtl.code',code)}ensureMe(startHost,true)}}}));
+  box.appendChild(h('button',{type:'button','class':'btn',text:EMBED?'Host a game from this phone':'Host a game on this screen',on:{click:function(){if(role!=='host'){G=newGame();code=load('rtl.hostcode',null)||makeCode();save('rtl.hostcode',code);save('rtl.code',code)}ensureMe(startHost,true)}}}));
   box.appendChild(h('button',{type:'button','class':'btn small',text:'Play on this one device',on:{click:function(){role='local';save('rtl.role',role);if(G.phase==='lobby'||!G.v)G=newGame();ensureMe(function(){hostSelf();render()},true)}}}));
   stage.appendChild(box);
 }
@@ -769,16 +770,24 @@ $('menuBtn').addEventListener('click',openMenu);
 /* the phone's back button closes what is open instead of leaving the game */
 try{history.pushState({rtl:1},'')}catch(e){}
 window.addEventListener('popstate',function(){if(sheetView&&sheetView!=='join')closeSheet();try{history.pushState({rtl:1},'')}catch(e){}});
-window.addEventListener('hashchange',function(){if(!role)render()});
+function joinFromLink(){
+  var hc=(location.hash||'').replace('#','').toUpperCase();
+  if(!/^[A-Z]{4}$/.test(hc)||DISPLAY)return false;
+  if((role==='client'||role==='host')&&code===hc)return false;
+  if(role==='host')return false;                  // the host screen never leaves its own room from a link
+  dropNet();G=newGame();save('rtl.game',G);
+  if(me&&(me.team===1||me.team===2||me.tv)){startClient(hc)}else{role=null;save('rtl.role',null);closeSheet();render()}
+  return true;
+}
+window.addEventListener('hashchange',function(){if(!joinFromLink()&&!role)render()});
 
 /* ---------------- start ---------------- */
 if(DISPLAY){window.hubState=function(g){if(g&&typeof g==='object')applyState(g)};render();return}
 loadCards();
-var hc=(location.hash||'').replace('#','').toUpperCase();
-if(/^[A-Z]{4}$/.test(hc)&&!(role==='client'&&code===hc)&&!(role==='host'&&code===hc)){role=null}
+var linked=joinFromLink();
 render();
 if(role==='host')startHost();
-else if(role==='client'&&code)startClient(code);
+else if(role==='client'&&code&&!linked)startClient(code);
 else if(role==='local'){hostSelf();render()}
 hubPush();
 })();
